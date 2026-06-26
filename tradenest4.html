@@ -1,695 +1,850 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>TradeNest — Buy & Sell Anything</title>
-  <style>
-    body { font-family: Arial, sans-serif; margin: 0; background: #f2f2f2; }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TradeNest</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: Arial, sans-serif; background: #fff; color: #111; }
 
-    nav {
-      background: red;
-      padding: 10px 20px;
-      display: flex;
-      align-items: center;
-      gap: 6px;
-    }
-    .logo { color: white; font-size: 20px; font-weight: bold; cursor: pointer; margin-right: auto; }
-    nav a {
-      color: white;
-      border: 1px solid white;
-      padding: 4px 10px;
-      border-radius: 4px;
-      font-size: 13px;
-      cursor: pointer;
-      text-decoration: none;
-    }
-    nav a:hover { background: white; color: red; }
-    nav a.active { background: white; color: red; }
-    nav span.hi { color: white; font-size: 13px; }
+  /* NAV */
+  nav {
+    background: #cc0000;
+    padding: 10px 20px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  nav .logo { color: #fff; font-size: 22px; font-weight: bold; cursor: pointer; }
+  nav .nav-right { display: flex; gap: 8px; align-items: center; }
+  nav a {
+    color: #fff;
+    text-decoration: none;
+    font-size: 14px;
+    padding: 5px 10px;
+    border: 1px solid #fff;
+    border-radius: 3px;
+    cursor: pointer;
+    background: transparent;
+  }
+  nav a:hover { background: #fff; color: #cc0000; }
+  nav .user-info { color: #fff; font-size: 14px; }
 
-    .page { display: none; }
-    .page.active { display: block; }
+  /* MAIN LAYOUT */
+  .container { max-width: 960px; margin: 0 auto; padding: 20px; }
 
-    .wrap { max-width: 900px; margin: auto; padding: 20px; }
+  /* PAGES */
+  .page { display: none; }
+  .page.active { display: block; }
 
-    .banner {
-      background: red;
-      color: white;
-      text-align: center;
-      padding: 30px 20px;
-      margin-bottom: 16px;
-    }
-    .banner h1 { margin: 0 0 6px 0; font-size: 26px; }
-    .banner p  { margin: 0; font-size: 14px; }
+  /* HOME */
+  .banner {
+    background: #cc0000;
+    color: #fff;
+    padding: 30px 20px;
+    text-align: center;
+    margin-bottom: 20px;
+    border-radius: 4px;
+  }
+  .banner h1 { font-size: 28px; margin-bottom: 8px; }
+  .banner p { font-size: 14px; margin-bottom: 15px; }
+  .banner button {
+    background: #fff;
+    color: #cc0000;
+    border: none;
+    padding: 8px 20px;
+    font-size: 14px;
+    font-weight: bold;
+    border-radius: 3px;
+    cursor: pointer;
+    margin: 4px;
+  }
+  .banner button:hover { background: #f0f0f0; }
 
-    .grid { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 10px; }
-    .card {
-      background: white;
-      border: 1px solid #ccc;
-      width: 195px;
-      cursor: pointer;
-    }
-    .card:hover { border-color: red; }
-    .card img { width: 100%; height: 135px; object-fit: cover; display: block; }
-    .card .body { padding: 8px; }
-    .card .body p { margin: 2px 0; font-size: 13px; }
-    .card .price { color: red; font-weight: bold; }
-    .card .seller { color: #888; font-size: 12px; }
+  .stats-bar {
+    display: flex;
+    gap: 20px;
+    background: #f5f5f5;
+    border: 1px solid #ddd;
+    padding: 12px 16px;
+    margin-bottom: 20px;
+    border-radius: 4px;
+    font-size: 14px;
+    flex-wrap: wrap;
+  }
+  .stats-bar span { color: #cc0000; font-weight: bold; }
 
-    h2 { font-size: 18px; margin-bottom: 12px; }
+  /* SEARCH */
+  .search-row {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 16px;
+    flex-wrap: wrap;
+  }
+  .search-row input {
+    flex: 1;
+    padding: 7px 10px;
+    border: 1px solid #ccc;
+    border-radius: 3px;
+    font-size: 14px;
+    min-width: 160px;
+  }
+  .search-row select {
+    padding: 7px 10px;
+    border: 1px solid #ccc;
+    border-radius: 3px;
+    font-size: 14px;
+  }
+  .search-row input:focus, .search-row select:focus { outline: none; border-color: #cc0000; }
 
-    label { display: block; font-size: 13px; font-weight: bold; margin-top: 8px; margin-bottom: 2px; }
-    input, select, textarea {
-      width: 100%;
-      padding: 7px;
-      border: 1px solid #ccc;
-      font-size: 13px;
-      box-sizing: border-box;
-    }
-    input:focus, select:focus, textarea:focus { border-color: red; outline: none; }
-    textarea { resize: vertical; }
-    .two { display: flex; gap: 12px; }
-    .two > div { flex: 1; }
+  /* PRODUCT GRID */
+  h3 { font-size: 16px; margin-bottom: 12px; border-left: 4px solid #cc0000; padding-left: 8px; }
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 12px;
+  }
+  .card {
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    overflow: hidden;
+    cursor: pointer;
+    transition: border-color 0.15s;
+  }
+  .card:hover { border-color: #cc0000; }
+  .card-img {
+    height: 130px;
+    background: #f5f5f5;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 40px;
+    border-bottom: 1px solid #ddd;
+    overflow: hidden;
+  }
+  .card-img img { width: 100%; height: 100%; object-fit: cover; }
+  .card-body { padding: 10px; }
+  .card-title { font-size: 13px; font-weight: bold; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; margin-bottom: 4px; }
+  .card-price { color: #cc0000; font-size: 15px; font-weight: bold; }
+  .card-meta { font-size: 11px; color: #777; margin-top: 3px; }
 
-    button {
-      background: red;
-      color: white;
-      border: none;
-      padding: 8px 16px;
-      font-size: 13px;
-      cursor: pointer;
-      margin-top: 8px;
-    }
-    button:hover { background: darkred; }
+  /* FORMS */
+  .form-box {
+    max-width: 440px;
+    margin: 30px auto;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    padding: 24px;
+  }
+  .form-box h2 { font-size: 20px; margin-bottom: 4px; }
+  .form-box .sub { font-size: 13px; color: #777; margin-bottom: 18px; }
+  .fg { margin-bottom: 14px; }
+  .fg label { display: block; font-size: 12px; font-weight: bold; margin-bottom: 4px; color: #444; }
+  .fg input, .fg select, .fg textarea {
+    width: 100%;
+    padding: 7px 10px;
+    border: 1px solid #ccc;
+    border-radius: 3px;
+    font-size: 14px;
+    font-family: Arial, sans-serif;
+  }
+  .fg input:focus, .fg select:focus, .fg textarea:focus { outline: none; border-color: #cc0000; }
+  .fg textarea { resize: vertical; min-height: 80px; }
+  .two { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  .btn-red {
+    background: #cc0000;
+    color: #fff;
+    border: none;
+    padding: 9px 18px;
+    font-size: 14px;
+    border-radius: 3px;
+    cursor: pointer;
+    width: 100%;
+  }
+  .btn-red:hover { background: #aa0000; }
+  .err { background: #ffe5e5; border: 1px solid #cc0000; color: #cc0000; padding: 8px 10px; border-radius: 3px; font-size: 13px; margin-bottom: 12px; display: none; }
+  .succ { background: #e5ffe5; border: 1px solid #2a9a2a; color: #1a7a1a; padding: 8px 10px; border-radius: 3px; font-size: 13px; margin-bottom: 12px; display: none; }
+  .switch-link { text-align: center; font-size: 13px; color: #555; margin-top: 12px; }
+  .switch-link a { color: #cc0000; cursor: pointer; }
 
-    .err { color: red; font-size: 13px; margin-bottom: 6px; }
-    .ok  { color: green; font-size: 13px; margin-bottom: 6px; }
+  /* SELL FORM */
+  .sell-box { max-width: 560px; margin: 20px auto; border: 1px solid #ddd; border-radius: 4px; padding: 24px; }
+  .sell-box h2 { font-size: 20px; margin-bottom: 4px; }
+  .sell-box .sub { font-size: 13px; color: #777; margin-bottom: 18px; }
+  .img-drop {
+    border: 2px dashed #ccc;
+    border-radius: 4px;
+    padding: 20px;
+    text-align: center;
+    font-size: 13px;
+    color: #777;
+    cursor: pointer;
+    margin-bottom: 4px;
+  }
+  .img-drop:hover { border-color: #cc0000; color: #cc0000; }
+  #imgPreview { width: 100%; max-height: 160px; object-fit: cover; border-radius: 3px; display: none; margin-top: 8px; }
 
-    .upload-box {
-      border: 2px dashed #ccc;
-      text-align: center;
-      padding: 14px;
-      cursor: pointer;
-      color: #777;
-      font-size: 13px;
-      margin-top: 3px;
-    }
-    .upload-box:hover { border-color: red; color: red; }
-    #photo-preview { display: none; width: 100%; max-height: 150px; object-fit: cover; margin-top: 6px; }
+  /* PROFILE */
+  .profile-box { max-width: 640px; }
+  .profile-top { display: flex; align-items: center; gap: 16px; border: 1px solid #ddd; border-radius: 4px; padding: 16px; margin-bottom: 16px; }
+  .p-avatar { width: 60px; height: 60px; border-radius: 50%; background: #cc0000; color: #fff; display: flex; align-items: center; justify-content: center; font-size: 24px; font-weight: bold; flex-shrink: 0; }
+  .p-info h3 { font-size: 18px; }
+  .p-info p { font-size: 13px; color: #777; }
+  .info-table { width: 100%; border-collapse: collapse; margin-bottom: 16px; font-size: 14px; }
+  .info-table td { padding: 8px 10px; border: 1px solid #ddd; }
+  .info-table td:first-child { background: #f5f5f5; font-weight: bold; width: 140px; color: #444; }
+  .danger-box { border: 1px solid #cc0000; border-radius: 4px; padding: 16px; margin-top: 20px; }
+  .danger-box h4 { color: #cc0000; margin-bottom: 6px; font-size: 15px; }
+  .danger-box p { font-size: 13px; color: #555; margin-bottom: 12px; }
+  .btn-outline-red { background: #fff; color: #cc0000; border: 1px solid #cc0000; padding: 7px 16px; font-size: 13px; border-radius: 3px; cursor: pointer; }
+  .btn-outline-red:hover { background: #cc0000; color: #fff; }
+  .my-item { display: flex; align-items: center; gap: 10px; border: 1px solid #ddd; border-radius: 3px; padding: 10px; margin-bottom: 8px; font-size: 13px; }
+  .my-item-icon { font-size: 20px; }
+  .my-item-info { flex: 1; }
+  .my-item-title { font-weight: bold; }
+  .my-item-meta { color: #777; font-size: 12px; }
+  .btn-sm-red { background: #cc0000; color: #fff; border: none; padding: 4px 10px; font-size: 12px; border-radius: 3px; cursor: pointer; }
+  .btn-sm-red:hover { background: #aa0000; }
 
-    .card-btns { display: flex; gap: 6px; padding: 0 8px 8px; }
-    .card-btns button { margin-top: 0; flex: 1; padding: 6px 8px; font-size: 12px; }
-    .btn-outline { background: white; color: red; border: 1px solid red; }
-    .btn-outline:hover { background: red; color: white; }
+  /* ORDERS */
+  .order-row { display: flex; align-items: center; gap: 12px; border: 1px solid #ddd; border-radius: 3px; padding: 12px; margin-bottom: 8px; font-size: 13px; }
+  .o-icon { font-size: 22px; }
+  .o-info { flex: 1; }
+  .o-title { font-weight: bold; font-size: 14px; }
+  .o-meta { color: #777; font-size: 12px; }
+  .badge { font-size: 11px; font-weight: bold; padding: 3px 8px; border-radius: 10px; }
+  .b-delivered { background: #d4edda; color: #155724; }
+  .b-processing { background: #fff3cd; color: #856404; }
+  .b-shipped { background: #cce5ff; color: #004085; }
+  .limit-note { background: #fff3cd; border: 1px solid #ffc107; border-radius: 3px; padding: 8px 12px; font-size: 13px; margin-bottom: 14px; }
+  .tabs { display: flex; gap: 0; border-bottom: 2px solid #cc0000; margin-bottom: 14px; }
+  .tab-btn { padding: 7px 18px; font-size: 13px; cursor: pointer; border: none; background: #f5f5f5; border-right: 1px solid #ddd; font-weight: bold; }
+  .tab-btn.active { background: #cc0000; color: #fff; }
 
-    table { width: 100%; border-collapse: collapse; margin-bottom: 14px; }
-    td { padding: 7px 10px; border: 1px solid #ddd; font-size: 13px; }
-    td:first-child { background: #f5f5f5; font-weight: bold; width: 110px; }
+  /* MODAL */
+  .overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.55); display: none; align-items: center; justify-content: center; z-index: 200; padding: 16px; }
+  .overlay.open { display: flex; }
+  .modal { background: #fff; border-radius: 4px; padding: 20px; max-width: 460px; width: 100%; max-height: 90vh; overflow-y: auto; }
+  .modal h3 { font-size: 17px; margin-bottom: 10px; }
+  .modal p { font-size: 13px; color: #555; margin-bottom: 14px; line-height: 1.5; }
+  .modal-btns { display: flex; gap: 8px; justify-content: flex-end; margin-top: 10px; }
+  .modal-btns button { padding: 6px 16px; font-size: 13px; border-radius: 3px; cursor: pointer; border: 1px solid #ccc; background: #fff; }
+  .modal-btns .btn-confirm { background: #cc0000; color: #fff; border-color: #cc0000; }
+  .modal-btns .btn-confirm:hover { background: #aa0000; }
+  .pdetail-img { width: 100%; height: 180px; object-fit: cover; border-radius: 3px; background: #f5f5f5; display: flex; align-items: center; justify-content: center; font-size: 50px; margin-bottom: 12px; overflow: hidden; }
+  .pdetail-img img { width: 100%; height: 100%; object-fit: cover; }
+  .detail-price { font-size: 22px; font-weight: bold; color: #cc0000; margin: 6px 0; }
+  .detail-tags { display: flex; flex-wrap: wrap; gap: 5px; margin: 8px 0; }
+  .tag { background: #f0f0f0; border: 1px solid #ddd; border-radius: 3px; padding: 2px 7px; font-size: 11px; color: #444; }
 
-    .row {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      border: 1px solid #ddd;
-      padding: 8px;
-      margin-bottom: 6px;
-      background: white;
-      font-size: 13px;
-    }
-    .row img { width: 44px; height: 44px; object-fit: cover; flex-shrink: 0; }
-    .row .info { flex: 1; }
-    .row button { margin-top: 0; padding: 4px 8px; font-size: 12px; }
+  /* TOAST */
+  #toast {
+    position: fixed; bottom: 20px; right: 20px; background: #333; color: #fff;
+    padding: 10px 16px; border-radius: 4px; font-size: 13px;
+    display: none; z-index: 999; border-left: 4px solid #cc0000;
+  }
+  #toast.show { display: block; }
 
-    .status { font-size: 11px; font-weight: bold; padding: 2px 7px; border-radius: 8px; }
-    .delivered  { background: #d4edda; color: green; }
-    .shipped    { background: #cce5ff; color: #004; }
-    .processing { background: #fff3cd; color: #856404; }
-
-    .action-btns { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 16px; }
-    .action-btns button { margin-top: 0; }
-    .btn-outline { background: white; color: red; border: 1px solid red; }
-    .btn-outline:hover { background: red; color: white; }
-    .btn-gray { background: #666; border: none; }
-    .btn-gray:hover { background: #444; }
-
-    .cart-total { font-size: 14px; font-weight: bold; color: red; margin: 8px 0; }
-
-    #toast {
-      position: fixed;
-      bottom: 20px;
-      right: 20px;
-      background: #333;
-      color: white;
-      padding: 10px 16px;
-      border-radius: 6px;
-      font-size: 13px;
-      display: none;
-      z-index: 999;
-      border-left: 4px solid red;
-    }
-  </style>
+  @media(max-width:520px) {
+    .two { grid-template-columns: 1fr; }
+    .grid { grid-template-columns: repeat(auto-fill, minmax(150px,1fr)); }
+    nav .logo { font-size: 17px; }
+  }
+</style>
 </head>
 <body>
 
 <!-- NAV -->
 <nav>
-  <span class="logo" onclick="show('home')">TradeNest</span>
-  <a onclick="show('home')"    id="nav-home"    class="active">Home</a>
-  <a onclick="show('login')"   id="nav-login">Login</a>
-  <a onclick="show('signup')"  id="nav-signup">Sign Up</a>
-  <a onclick="show('cart')"    id="nav-cart"    style="display:none">Cart</a>
-  <a onclick="show('account')" id="nav-account" style="display:none">My Account</a>
-  <span class="hi" id="nav-hi" style="display:none"></span>
+  <div class="logo" onclick="showPage('home')">🛒 TradeNest</div>
+  <div class="nav-right" id="navRight">
+    <a onclick="showPage('home')">Home</a>
+    <a id="nLogin" onclick="showPage('login')">Login</a>
+    <a id="nReg" onclick="showPage('register')">Sign Up</a>
+    <span class="user-info" id="nUser" style="display:none"></span>
+    <a id="nSell" onclick="showPage('sell')" style="display:none">+ Sell</a>
+    <a id="nOrders" onclick="showPage('orders')" style="display:none">Orders</a>
+    <a id="nProfile" onclick="showPage('profile')" style="display:none">My Account</a>
+    <a id="nLogout" onclick="logout()" style="display:none">Logout</a>
+  </div>
 </nav>
 
 <div id="toast"></div>
 
-
-<!-- HOME PAGE -->
+<!-- HOME -->
 <div class="page active" id="page-home">
-  <div class="banner">
-    <h1>Buy &amp; Sell Anything</h1>
-    <p>Simple marketplace. Find great deals or sell your stuff!</p>
-  </div>
-  <div class="wrap">
-    <input type="text" id="search" placeholder="Search products..." oninput="loadGrid()" style="margin-bottom:12px">
-    <h2>All Listings</h2>
-    <div class="grid" id="grid"></div>
+  <div class="container">
+    <div class="banner">
+      <h1>Buy & Sell Anything</h1>
+      <p>A simple marketplace for everyone. Find great deals or sell your stuff easily.</p>
+      <button onclick="showPage('register')">Start Selling</button>
+      <button onclick="document.getElementById('browse').scrollIntoView()">Browse Items</button>
+    </div>
+
+    <div class="stats-bar">
+      👤 Users: <span id="sUsers">0</span> &nbsp;&nbsp;
+      📦 Listings: <span id="sProducts">0</span> &nbsp;&nbsp;
+      🛍 Orders: <span id="sOrders">0</span>
+    </div>
+
+    <div id="browse">
+      <div class="search-row">
+        <input type="text" id="searchQ" placeholder="Search items..." oninput="renderGrid()">
+        <select id="searchCat" onchange="renderGrid()">
+          <option value="">All Categories</option>
+          <option>Electronics</option>
+          <option>Clothing & Fashion</option>
+          <option>Books</option>
+          <option>Furniture</option>
+          <option>Sports & Fitness</option>
+          <option>Toys & Games</option>
+          <option>Automotive</option>
+          <option>Home & Garden</option>
+          <option>Other</option>
+        </select>
+      </div>
+      <h3>All Listings</h3>
+      <div class="grid" id="productGrid"></div>
+    </div>
   </div>
 </div>
 
-
-<!-- LOGIN PAGE -->
+<!-- LOGIN -->
 <div class="page" id="page-login">
-  <div class="wrap">
-    <h2>Login</h2>
-    <p id="login-err" class="err"></p>
-    <label>Email</label>
-    <input type="email" id="l-email" placeholder="your@email.com">
-    <label>Password</label>
-    <input type="password" id="l-pass" placeholder="Password">
-    <br>
-    <button onclick="doLogin()">Login</button>
-    <p style="font-size:13px;margin-top:10px">No account? <a onclick="show('signup')" style="color:red;cursor:pointer">Sign up</a></p>
-  </div>
-</div>
-
-
-<!-- SIGNUP PAGE -->
-<div class="page" id="page-signup">
-  <div class="wrap">
-    <h2>Create Account</h2>
-    <p id="signup-err" class="err"></p>
-    <div class="two">
-      <div><label>First Name</label><input type="text" id="s-first" placeholder="Ravi"></div>
-      <div><label>Last Name</label><input type="text" id="s-last" placeholder="Kumar"></div>
+  <div class="container">
+    <div class="form-box">
+      <h2>Login</h2>
+      <p class="sub">Welcome back! Login to your account.</p>
+      <div class="err" id="loginErr"></div>
+      <div class="fg">
+        <label>Email</label>
+        <input type="email" id="lEmail" placeholder="email@example.com">
+      </div>
+      <div class="fg">
+        <label>Password</label>
+        <input type="password" id="lPass" placeholder="Password">
+      </div>
+      <button class="btn-red" onclick="doLogin()">Login</button>
+      <div class="switch-link">No account? <a onclick="showPage('register')">Sign up here</a></div>
     </div>
-    <label>Email</label>
-    <input type="email" id="s-email" placeholder="your@email.com">
-    <label>Phone</label>
-    <input type="tel" id="s-phone" placeholder="9876543210">
-    <label>City</label>
-    <input type="text" id="s-city" placeholder="Chennai">
-    <label>Password (min 6 characters)</label>
-    <input type="password" id="s-pass" placeholder="Password">
-    <label>Confirm Password</label>
-    <input type="password" id="s-confirm" placeholder="Type password again">
-    <br>
-    <button onclick="doSignup()">Create Account</button>
-    <p style="font-size:13px;margin-top:10px">Already registered? <a onclick="show('login')" style="color:red;cursor:pointer">Login</a></p>
   </div>
 </div>
 
+<!-- REGISTER -->
+<div class="page" id="page-register">
+  <div class="container">
+    <div class="form-box" style="max-width:500px">
+      <h2>Create Account</h2>
+      <p class="sub">Fill in your details to get started.</p>
+      <div class="err" id="regErr"></div>
+      <div class="two">
+        <div class="fg"><label>First Name</label><input type="text" id="rFirst" placeholder="Ravi"></div>
+        <div class="fg"><label>Last Name</label><input type="text" id="rLast" placeholder="Kumar"></div>
+      </div>
+      <div class="fg"><label>Email</label><input type="email" id="rEmail" placeholder="you@email.com"></div>
+      <div class="fg"><label>Phone Number</label><input type="tel" id="rPhone" placeholder="+91 9876543210"></div>
+      <div class="fg"><label>City</label><input type="text" id="rCity" placeholder="Chennai"></div>
+      <div class="fg"><label>Password</label><input type="password" id="rPass" placeholder="Min 6 characters"></div>
+      <div class="fg"><label>Confirm Password</label><input type="password" id="rConfirm" placeholder="Repeat password"></div>
+      <button class="btn-red" onclick="doRegister()">Create Account</button>
+      <div class="switch-link">Already have an account? <a onclick="showPage('login')">Login</a></div>
+    </div>
+  </div>
+</div>
 
-<!-- SELL PAGE -->
+<!-- SELL -->
 <div class="page" id="page-sell">
-  <div class="wrap">
-    <h2>List a Product for Sale</h2>
-    <p id="sell-err" class="err"></p>
-    <p id="sell-ok" class="ok"></p>
+  <div class="container">
+    <div class="sell-box">
+      <h2>List a Product</h2>
+      <p class="sub">Enter the details of the item you want to sell.</p>
+      <div class="err" id="sellErr"></div>
+      <div class="succ" id="sellSucc"></div>
 
-    <label>Product Photo</label>
-    <div class="upload-box" onclick="document.getElementById('photo-input').click()">
-      Click here to upload a photo
-      <input type="file" id="photo-input" accept="image/*" style="display:none" onchange="previewPhoto(event)">
-    </div>
-    <img id="photo-preview" src="" alt="preview">
+      <div class="fg">
+        <label>Product Image</label>
+        <div class="img-drop" onclick="document.getElementById('imgFile').click()">
+          📷 Click to upload image
+          <input type="file" id="imgFile" accept="image/*" style="display:none" onchange="handleImg(event)">
+        </div>
+        <img id="imgPreview" src="" alt="preview">
+      </div>
 
-    <label>Title *</label>
-    <input type="text" id="p-title" placeholder="e.g. iPhone 13 128GB">
+      <div class="fg"><label>Product Title *</label><input type="text" id="sTitle" placeholder="e.g. iPhone 13 128GB"></div>
+      <div class="two">
+        <div class="fg">
+          <label>Category *</label>
+          <select id="sCat">
+            <option value="">Select</option>
+            <option>Electronics</option>
+            <option>Clothing & Fashion</option>
+            <option>Books</option>
+            <option>Furniture</option>
+            <option>Sports & Fitness</option>
+            <option>Toys & Games</option>
+            <option>Automotive</option>
+            <option>Home & Garden</option>
+            <option>Other</option>
+          </select>
+        </div>
+        <div class="fg">
+          <label>Condition *</label>
+          <select id="sCond">
+            <option>Like New</option>
+            <option>Good</option>
+            <option>Fair</option>
+            <option>For Parts</option>
+          </select>
+        </div>
+      </div>
+      <div class="two">
+        <div class="fg"><label>Brand</label><input type="text" id="sBrand" placeholder="Apple, Samsung..."></div>
+        <div class="fg"><label>Model / Version</label><input type="text" id="sVersion" placeholder="v2, 2023 Edition..."></div>
+      </div>
+      <div class="two">
+        <div class="fg"><label>Price (₹) *</label><input type="number" id="sPrice" placeholder="5000" min="1"></div>
+        <div class="fg"><label>Age / How long used</label><input type="text" id="sAge" placeholder="6 months, 1 year"></div>
+      </div>
+      <div class="fg"><label>Description *</label><textarea id="sDesc" placeholder="Describe the product — features, defects, reason for selling..."></textarea></div>
+      <div class="fg"><label>Your Location / City</label><input type="text" id="sLoc" placeholder="Chennai"></div>
 
-    <label>Price (Rs.) *</label>
-    <input type="text" id="p-price" placeholder="e.g. 5000">
-
-    <label>Condition</label>
-    <select id="p-cond">
-      <option>Like New</option>
-      <option>Good</option>
-      <option>Fair</option>
-      <option>For Parts</option>
-    </select>
-
-    <label>Description *</label>
-    <textarea id="p-desc" rows="3"></textarea>
-
-    <br>
-    <button onclick="doSell()">Post Listing</button>
-  </div>
-</div>
-
-
-<!-- CART PAGE -->
-<div class="page" id="page-cart">
-  <div class="wrap">
-    <h2>My Cart</h2>
-    <div id="cart-list"></div>
-    <p class="cart-total" id="cart-total"></p>
-    <div id="cart-order-btn"></div>
-  </div>
-</div>
-
-
-<!-- ACCOUNT PAGE -->
-<div class="page" id="page-account">
-  <div class="wrap">
-    <h2>My Account</h2>
-
-    <table>
-      <tr><td>Name</td>    <td id="a-name"></td></tr>
-      <tr><td>Email</td>   <td id="a-email"></td></tr>
-      <tr><td>Phone</td>   <td id="a-phone"></td></tr>
-      <tr><td>City</td>    <td id="a-city"></td></tr>
-      <tr><td>Listings</td><td id="a-count"></td></tr>
-    </table>
-
-    <div class="action-btns">
-      <button onclick="show('sell')">+ Sell a Product</button>
-      <button class="btn-outline" onclick="toggleOrders()">My Orders</button>
-      <button class="btn-gray" onclick="doLogout()">Logout</button>
-    </div>
-
-    <div id="orders-section" style="display:none">
-      <h2>My Orders</h2>
-      <div id="orders-list"></div>
-    </div>
-
-    <h2>My Listings</h2>
-    <div id="my-listings"></div>
-
-    <div style="margin-top:20px">
-      <h3 style="color:red;margin-bottom:6px">Delete Account</h3>
-      <p style="font-size:13px;color:#555;margin-bottom:8px">This will permanently delete your account, listings and orders. Cannot be undone.</p>
-      <button onclick="doDeleteAccount()" class="btn-outline">Delete My Account</button>
+      <button class="btn-red" onclick="doSell()">Post Listing</button>
     </div>
   </div>
 </div>
 
+<!-- ORDERS -->
+<div class="page" id="page-orders">
+  <div class="container">
+    <h3>My Orders</h3>
+    <div class="limit-note">📦 Orders placed today: <strong id="todayCount">0</strong>/3 &nbsp;(limit resets at midnight)</div>
+    <div class="tabs">
+      <button class="tab-btn active" onclick="switchTab('bought',this)">Items I Bought</button>
+      <button class="tab-btn" onclick="switchTab('sold',this)">Items I Sold</button>
+    </div>
+    <div id="orderList"></div>
+  </div>
+</div>
 
+<!-- PROFILE -->
+<div class="page" id="page-profile">
+  <div class="container">
+    <div class="profile-box">
+      <div class="profile-top">
+        <div class="p-avatar" id="pAvatar"></div>
+        <div class="p-info">
+          <h3 id="pName"></h3>
+          <p id="pEmail"></p>
+          <p style="font-size:12px;color:#cc0000;font-weight:bold;margin-top:4px">✔ Verified Member</p>
+        </div>
+      </div>
+
+      <table class="info-table">
+        <tr><td>Phone</td><td id="pPhone"></td></tr>
+        <tr><td>City</td><td id="pCity"></td></tr>
+        <tr><td>Member Since</td><td id="pJoined"></td></tr>
+        <tr><td>Total Listings</td><td id="pListCount"></td></tr>
+      </table>
+
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px">
+        <h3>My Listings</h3>
+        <button class="btn-sm-red" onclick="showPage('sell')">+ Add New</button>
+      </div>
+      <div id="myList"></div>
+
+      <div class="danger-box">
+        <h4>⚠ Delete Account</h4>
+        <p>This will permanently delete your account, all listings, and order history. This cannot be undone.</p>
+        <button class="btn-outline-red" onclick="openDeleteModal()">Delete My Account</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- PRODUCT DETAIL MODAL -->
+<div class="overlay" id="productOverlay">
+  <div class="modal">
+    <div id="pDetailBody"></div>
+    <div class="modal-btns">
+      <button onclick="closeOverlay('productOverlay')">Close</button>
+      <button class="btn-confirm" id="orderBtn" onclick="placeOrder()">Order Now</button>
+    </div>
+  </div>
+</div>
+
+<!-- DELETE ACCOUNT MODAL -->
+<div class="overlay" id="deleteOverlay">
+  <div class="modal">
+    <h3 style="color:#cc0000">⚠ Permanently Delete Account</h3>
+    <p>
+      Are you sure you want to delete your TradeNest account?<br><br>
+      This will remove <strong>all your data</strong> — profile, listings, and order history — forever. <strong>This cannot be undone.</strong><br><br>
+      Type <strong>DELETE</strong> below to confirm.
+    </p>
+    <div class="fg"><input type="text" id="delConfirm" placeholder="Type DELETE here"></div>
+    <div class="modal-btns">
+      <button onclick="closeOverlay('deleteOverlay')">Cancel</button>
+      <button class="btn-confirm" onclick="doDeleteAccount()">Yes, Delete My Account</button>
+    </div>
+  </div>
+</div>
 
 <script>
+// ---- STORAGE ----
+const K = { users:'tn_users', products:'tn_products', orders:'tn_orders', session:'tn_sess' };
+const get = k => { try { return JSON.parse(localStorage.getItem(k)) || []; } catch { return []; } };
+const save = (k,v) => localStorage.setItem(k, JSON.stringify(v));
+const getSession = () => { try { return JSON.parse(localStorage.getItem(K.session)); } catch { return null; } };
 
-  // ---- storage helpers ----
-  function save(key, val) { localStorage.setItem(key, JSON.stringify(val)); }
-  function load(key) {
-    var d = localStorage.getItem(key);
-    return d ? JSON.parse(d) : [];
+// ---- SEED ----
+function seed() {
+  if (localStorage.getItem('tn_seeded5')) return;
+  save(K.users, [
+    { id:'u1', firstName:'Priya', lastName:'Sharma', email:'priya@demo.com', phone:'9876500001', city:'Chennai', password:'demo123', joined:'Jan 2024' },
+    { id:'u2', firstName:'Arjun', lastName:'Nair', email:'arjun@demo.com', phone:'9876500002', city:'Bangalore', password:'demo123', joined:'Feb 2024' },
+    { id:'u3', firstName:'Meera', lastName:'Iyer', email:'meera@demo.com', phone:'9876500003', city:'Mumbai', password:'demo123', joined:'Mar 2024' },
+    { id:'u4', firstName:'Rohit', lastName:'Verma', email:'rohit@demo.com', phone:'9876500004', city:'Delhi', password:'demo123', joined:'Apr 2024' },
+  ]);
+  save(K.products, [
+    { id:'p1', sellerId:'u1', sellerName:'Priya S.', title:'iPhone 13 128GB', category:'Electronics', condition:'Good', brand:'Apple', version:'iPhone 13', price:48000, age:'1 year', location:'Chennai', desc:'Single owner, no scratches on screen. Small dent on corner. Comes with original charger and box.', image:'https://images.unsplash.com/photo-1591337676887-a217a6970a8a?w=500&q=80', emoji:'📱', at:Date.now()-864e5*9 },
+    { id:'p2', sellerId:'u2', sellerName:'Arjun N.', title:'Sony WH-1000XM4 Headphones', category:'Electronics', condition:'Like New', brand:'Sony', version:'XM4', price:15000, age:'3 months', location:'Bangalore', desc:'Used very rarely. Original box and all accessories included. Noise cancellation works perfectly.', image:'https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=500&q=80', emoji:'🎧', at:Date.now()-864e5*7 },
+    { id:'p3', sellerId:'u3', sellerName:'Meera I.', title:'Nike Running Shoes Size 7', category:'Clothing & Fashion', condition:'Good', brand:'Nike', version:'Air Zoom', price:3500, age:'5 months', location:'Mumbai', desc:'Worn about 15 times. Clean and in good shape. No major wear.', image:'https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=500&q=80', emoji:'👟', at:Date.now()-864e5*5 },
+    { id:'p4', sellerId:'u4', sellerName:'Rohit V.', title:'MacBook Air M1 2020', category:'Electronics', condition:'Good', brand:'Apple', version:'M1 2020', price:72000, age:'2 years', location:'Delhi', desc:'Battery health 88%. Comes with original charger. Used for college work only. No dents.', image:'https://images.unsplash.com/photo-1517336714731-489689fd1ca8?w=500&q=80', emoji:'💻', at:Date.now()-864e5*4 },
+    { id:'p5', sellerId:'u1', sellerName:'Priya S.', title:'Wooden Study Table', category:'Furniture', condition:'Fair', brand:'Local', version:'-', price:2500, age:'3 years', location:'Chennai', desc:'Sturdy solid wood table. Some scratches on surface. Perfect for students. Buyer must pick up.', image:'https://images.unsplash.com/photo-1555041469-a586c61ea9bc?w=500&q=80', emoji:'🪑', at:Date.now()-864e5*3 },
+    { id:'p6', sellerId:'u2', sellerName:'Arjun N.', title:'Atomic Habits - James Clear', category:'Books', condition:'Like New', brand:'Penguin', version:'First Edition', price:180, age:'1 month', location:'Bangalore', desc:'Read once, no highlights or dog-ears. Great book, highly recommend for everyone.', image:'https://images.unsplash.com/photo-1512820790803-83ca734da794?w=500&q=80', emoji:'📚', at:Date.now()-864e5*2 },
+    { id:'p7', sellerId:'u3', sellerName:'Meera I.', title:'Yoga Mat 6mm - Decathlon', category:'Sports & Fitness', condition:'Good', brand:'Decathlon', version:'v2', price:600, age:'8 months', location:'Mumbai', desc:'Used regularly, cleaned and rolled. Good grip on both sides. No tears.', image:'https://images.unsplash.com/photo-1601925228076-6b9db3a97765?w=500&q=80', emoji:'🧘', at:Date.now()-864e5 },
+    { id:'p8', sellerId:'u4', sellerName:'Rohit V.', title:'Canon EOS 1500D + Kit Lens', category:'Electronics', condition:'Good', brand:'Canon', version:'EOS 1500D', price:20000, age:'2 years', location:'Delhi', desc:'Great for beginners. Comes with 18-55mm kit lens, bag, and extra battery. ~1500 shutter count.', image:'https://images.unsplash.com/photo-1502920917128-1aa500764cbd?w=500&q=80', emoji:'📷', at:Date.now()-36e5*8 },
+    { id:'p9', sellerId:'u1', sellerName:'Priya S.', title:'Hero Sprint 26T Cycle', category:'Sports & Fitness', condition:'Fair', brand:'Hero', version:'Sprint 26T', price:3200, age:'4 years', location:'Chennai', desc:'Needs minor brake servicing. Good for daily commute. Chain recently replaced.', image:'https://images.unsplash.com/photo-1485965120184-e220f721d03e?w=500&q=80', emoji:'🚲', at:Date.now()-36e5*5 },
+    { id:'p10', sellerId:'u2', sellerName:'Arjun N.', title:'PS4 Controller - DualShock 4', category:'Electronics', condition:'Good', brand:'Sony', version:'DualShock 4', price:2800, age:'1.5 years', location:'Bangalore', desc:'Works perfectly. Light wear on thumbsticks. Both vibration motors functional.', image:'https://images.unsplash.com/photo-1593118247619-e2d6f056869e?w=500&q=80', emoji:'🎮', at:Date.now()-36e5*2 },
+  ]);
+  save(K.orders, [
+    { id:'o1', buyerId:'u3', sellerId:'u1', productId:'p1', title:'iPhone 13 128GB', emoji:'📱', price:48000, status:'Delivered', date:'2024-11-15' },
+    { id:'o2', buyerId:'u4', sellerId:'u2', productId:'p2', title:'Sony WH-1000XM4', emoji:'🎧', price:15000, status:'Delivered', date:'2024-12-02' },
+    { id:'o3', buyerId:'u1', sellerId:'u3', productId:'p3', title:'Nike Running Shoes', emoji:'👟', price:3500, status:'Shipped', date:'2025-01-08' },
+    { id:'o4', buyerId:'u2', sellerId:'u4', productId:'p4', title:'MacBook Air M1', emoji:'💻', price:72000, status:'Processing', date:'2025-01-18' },
+  ]);
+  localStorage.setItem('tn_seeded5','1');
+}
+
+// ---- STATE ----
+let cu = null; // current user
+let selProd = null;
+let oTab = 'bought';
+
+function initApp() {
+  seed();
+  const s = getSession();
+  if (s) {
+    const u = get(K.users).find(u => u.id === s.id);
+    if (u) cu = u;
+    else localStorage.removeItem(K.session);
   }
-  function saveSession(id) { localStorage.setItem("uid", id); }
-  function getSession()    { return localStorage.getItem("uid"); }
-  function clearSession()  { localStorage.removeItem("uid"); }
+  refreshNav();
+  renderGrid();
+  updateStats();
+}
 
-  // ---- seed demo products (runs once) ----
-  function seedData() {
-    if (localStorage.getItem("seeded") === "v2") return;
-    save("products", [
-      { id:"p1",  sid:"", sname:"TradeNest", title:"iPhone 13 128GB",            cat:"Electronics",      cond:"Good",     brand:"Apple",  ver:"iPhone 13",   price:"48000", age:"1 year",    city:"Chennai",   desc:"Single owner. No scratches. Original charger included.",           photo:"https://images.unsplash.com/photo-1591337676887-a217a6970a8a?w=500&q=80", on:Date.now()-9*86400000 },
-      { id:"p2",  sid:"", sname:"TradeNest", title:"Sony WH-1000XM4 Headphones", cat:"Electronics",      cond:"Like New", brand:"Sony",   ver:"XM4",         price:"15000", age:"3 months",  city:"Bangalore", desc:"Used rarely. Original box. Noise cancellation works perfectly.",   photo:"https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=500&q=80", on:Date.now()-7*86400000 },
-      { id:"p3",  sid:"", sname:"TradeNest", title:"Nike Running Shoes Size 7",   cat:"Clothing",         cond:"Good",     brand:"Nike",   ver:"Air Zoom",    price:"3500",  age:"5 months",  city:"Mumbai",    desc:"Worn about 15 times. Clean and in good shape.",                    photo:"https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=500&q=80", on:Date.now()-5*86400000 },
-      { id:"p4",  sid:"", sname:"TradeNest", title:"MacBook Air M1 2020",         cat:"Electronics",      cond:"Good",     brand:"Apple",  ver:"M1 2020",     price:"72000", age:"2 years",   city:"Delhi",     desc:"Battery 88%. Original charger. College use only.",                 photo:"https://images.unsplash.com/photo-1517336714731-489689fd1ca8?w=500&q=80", on:Date.now()-4*86400000 },
-      { id:"p5",  sid:"", sname:"TradeNest", title:"Wooden Study Table",          cat:"Furniture",        cond:"Fair",     brand:"Local",  ver:"-",           price:"2500",  age:"3 years",   city:"Chennai",   desc:"Sturdy table, some scratches. Buyer must pick up.",                photo:"https://images.unsplash.com/photo-1555041469-a586c61ea9bc?w=500&q=80", on:Date.now()-3*86400000 },
-      { id:"p8",  sid:"", sname:"TradeNest", title:"Canon EOS 1500D + Kit Lens",  cat:"Electronics",      cond:"Good",     brand:"Canon",  ver:"EOS 1500D",   price:"20000", age:"2 years",   city:"Delhi",     desc:"Great for beginners. 18-55mm lens, bag, extra battery.",           photo:"https://images.unsplash.com/photo-1502920917128-1aa500764cbd?w=500&q=80", on:Date.now()-8*3600000  },
-      { id:"p9",  sid:"", sname:"TradeNest", title:"Hero Sprint 26T Cycle",       cat:"Sports & Fitness", cond:"Fair",     brand:"Hero",   ver:"Sprint 26T",  price:"3200",  age:"4 years",   city:"Chennai",   desc:"Needs minor service. Good for commute. Chain replaced.",           photo:"https://images.unsplash.com/photo-1485965120184-e220f721d03e?w=500&q=80", on:Date.now()-5*3600000  },
-      { id:"p10", sid:"", sname:"TradeNest", title:"PS4 Controller DualShock 4",  cat:"Electronics",      cond:"Good",     brand:"Sony",   ver:"DualShock 4", price:"2800",  age:"1.5 years", city:"Bangalore", desc:"Works perfectly. Light wear on thumbsticks.",                      photo:"https://images.unsplash.com/photo-1593118247619-e2d6f056869e?w=500&q=80", on:Date.now()-2*3600000  }
-    ]);
-    localStorage.setItem("seeded", "v2");
+// ---- NAV ----
+function refreshNav() {
+  const in_ = !!cu;
+  document.getElementById('nLogin').style.display = in_ ? 'none' : '';
+  document.getElementById('nReg').style.display = in_ ? 'none' : '';
+  document.getElementById('nUser').style.display = in_ ? '' : 'none';
+  document.getElementById('nSell').style.display = in_ ? '' : 'none';
+  document.getElementById('nOrders').style.display = in_ ? '' : 'none';
+  document.getElementById('nProfile').style.display = in_ ? '' : 'none';
+  document.getElementById('nLogout').style.display = in_ ? '' : 'none';
+  if (in_) document.getElementById('nUser').textContent = 'Hi, ' + cu.firstName;
+}
+
+// ---- AUTH ----
+function doLogin() {
+  const email = document.getElementById('lEmail').value.trim();
+  const pass = document.getElementById('lPass').value;
+  const err = document.getElementById('loginErr');
+  err.style.display = 'none';
+  if (!email || !pass) { showErr(err, 'Please enter email and password.'); return; }
+  const u = get(K.users).find(u => u.email.toLowerCase() === email.toLowerCase() && u.password === pass);
+  if (!u) { showErr(err, 'Wrong email or password. Try again.'); return; }
+  cu = u;
+  localStorage.setItem(K.session, JSON.stringify({ id: u.id }));
+  refreshNav();
+  toast('Logged in! Welcome back, ' + u.firstName);
+  showPage('home');
+}
+
+function doRegister() {
+  const f = document.getElementById('rFirst').value.trim();
+  const l = document.getElementById('rLast').value.trim();
+  const e = document.getElementById('rEmail').value.trim();
+  const ph = document.getElementById('rPhone').value.trim();
+  const c = document.getElementById('rCity').value.trim();
+  const p = document.getElementById('rPass').value;
+  const p2 = document.getElementById('rConfirm').value;
+  const err = document.getElementById('regErr');
+  err.style.display = 'none';
+  if (!f||!l||!e||!ph||!c||!p||!p2) { showErr(err,'All fields are required.'); return; }
+  if (p.length < 6) { showErr(err,'Password must be at least 6 characters.'); return; }
+  if (p !== p2) { showErr(err,'Passwords do not match.'); return; }
+  const users = get(K.users);
+  if (users.find(u => u.email.toLowerCase() === e.toLowerCase())) { showErr(err,'This email is already registered.'); return; }
+  const nu = { id:'u'+Date.now(), firstName:f, lastName:l, email:e, phone:ph, city:c, password:p, joined: new Date().toLocaleString('default',{month:'short',year:'numeric'}) };
+  users.push(nu);
+  save(K.users, users);
+  cu = nu;
+  localStorage.setItem(K.session, JSON.stringify({ id: nu.id }));
+  refreshNav();
+  ['rFirst','rLast','rEmail','rPhone','rCity','rPass','rConfirm'].forEach(id => document.getElementById(id).value='');
+  toast('Account created! Welcome to TradeNest 🎉');
+  showPage('home');
+}
+
+function logout() {
+  cu = null;
+  localStorage.removeItem(K.session);
+  refreshNav();
+  toast('Logged out.');
+  showPage('home');
+}
+
+// ---- PRODUCTS ----
+function renderGrid() {
+  const q = document.getElementById('searchQ').value.toLowerCase();
+  const cat = document.getElementById('searchCat').value;
+  let prods = get(K.products);
+  if (q) prods = prods.filter(p => p.title.toLowerCase().includes(q) || (p.brand||'').toLowerCase().includes(q) || (p.category||'').toLowerCase().includes(q));
+  if (cat) prods = prods.filter(p => p.category === cat);
+  prods.sort((a,b) => b.at - a.at);
+  const g = document.getElementById('productGrid');
+  if (!prods.length) { g.innerHTML = '<p style="color:#777;font-size:14px">No items found.</p>'; return; }
+  g.innerHTML = prods.map(p => `
+    <div class="card" onclick="openProd('${p.id}')">
+      <div class="card-img">
+        ${p.image
+          ? `<img src="${p.image}" alt="" style="width:100%;height:100%;object-fit:cover" onerror="this.style.display='none';this.parentElement.innerHTML='<span style=font-size:40px>${p.emoji||'📦'}</span>'">`
+          : `<span style="font-size:40px">${p.emoji||'📦'}</span>`}
+      </div>
+      <div class="card-body">
+        <div class="card-title">${p.title}</div>
+        <div class="card-price">₹${Number(p.price).toLocaleString('en-IN')}</div>
+        <div class="card-meta">${p.category} • ${p.condition}</div>
+        <div class="card-meta" style="color:#cc0000">${p.sellerName} • ${p.location||''}</div>
+      </div>
+    </div>
+  `).join('');
+}
+
+function updateStats() {
+  document.getElementById('sUsers').textContent = get(K.users).length;
+  document.getElementById('sProducts').textContent = get(K.products).length;
+  document.getElementById('sOrders').textContent = get(K.orders).length;
+}
+
+function openProd(id) {
+  const p = get(K.products).find(x => x.id === id);
+  if (!p) return;
+  selProd = p;
+  const mine = cu && cu.id === p.sellerId;
+  document.getElementById('pDetailBody').innerHTML = `
+    <div class="pdetail-img">${p.image ? `<img src="${p.image}" alt="" style="width:100%;height:100%;object-fit:cover;border-radius:3px" onerror="this.style.display='none'">` : `<span style="font-size:50px">${p.emoji||'📦'}</span>`}</div>
+    <h3>${p.title}</h3>
+    <div class="detail-price">₹${Number(p.price).toLocaleString('en-IN')}</div>
+    <p style="font-size:13px;color:#444;margin:8px 0">${p.desc}</p>
+    <div class="detail-tags">
+      <span class="tag">📦 ${p.category}</span>
+      <span class="tag">✅ ${p.condition}</span>
+      ${p.brand ? `<span class="tag">🏷 ${p.brand}</span>` : ''}
+      ${p.version ? `<span class="tag">🔢 ${p.version}</span>` : ''}
+      ${p.age ? `<span class="tag">⏱ ${p.age}</span>` : ''}
+      ${p.location ? `<span class="tag">📍 ${p.location}</span>` : ''}
+    </div>
+    <p style="font-size:12px;color:#777;margin-top:10px">Seller: <strong style="color:#cc0000">${p.sellerName}</strong></p>
+  `;
+  const btn = document.getElementById('orderBtn');
+  if (mine) { btn.style.display = 'none'; }
+  else { btn.style.display = ''; btn.textContent = cu ? 'Order Now' : 'Login to Order'; btn.disabled = !cu; }
+  document.getElementById('productOverlay').classList.add('open');
+}
+
+// ---- SELL ----
+let uploadedImg = '';
+function handleImg(e) {
+  const file = e.target.files[0]; if (!file) return;
+  const r = new FileReader();
+  r.onload = ev => {
+    uploadedImg = ev.target.result;
+    const pr = document.getElementById('imgPreview');
+    pr.src = uploadedImg; pr.style.display = 'block';
+  };
+  r.readAsDataURL(file);
+}
+
+function doSell() {
+  if (!cu) { showPage('login'); return; }
+  const title = document.getElementById('sTitle').value.trim();
+  const cat = document.getElementById('sCat').value;
+  const cond = document.getElementById('sCond').value;
+  const brand = document.getElementById('sBrand').value.trim();
+  const version = document.getElementById('sVersion').value.trim();
+  const price = document.getElementById('sPrice').value;
+  const age = document.getElementById('sAge').value.trim();
+  const desc = document.getElementById('sDesc').value.trim();
+  const loc = document.getElementById('sLoc').value.trim();
+  const err = document.getElementById('sellErr');
+  const succ = document.getElementById('sellSucc');
+  err.style.display = 'none'; succ.style.display = 'none';
+  if (!title||!cat||!price||!desc) { showErr(err,'Title, Category, Price and Description are required.'); return; }
+  const prod = {
+    id: 'p'+Date.now(), sellerId: cu.id,
+    sellerName: cu.firstName + ' ' + cu.lastName[0] + '.',
+    title, category:cat, condition:cond, brand, version,
+    price: Number(price), age, location:loc, desc,
+    image: uploadedImg, emoji:'📦', at: Date.now()
+  };
+  const prods = get(K.products);
+  prods.push(prod);
+  save(K.products, prods);
+  succ.textContent = 'Your listing is live! Redirecting...';
+  succ.style.display = 'block';
+  uploadedImg = '';
+  document.getElementById('imgPreview').style.display = 'none';
+  ['sTitle','sBrand','sVersion','sPrice','sAge','sDesc','sLoc'].forEach(id => document.getElementById(id).value='');
+  document.getElementById('sCat').value = '';
+  updateStats();
+  setTimeout(() => { succ.style.display='none'; showPage('profile'); }, 1800);
+}
+
+// ---- ORDERS ----
+function todayOrderCount() {
+  if (!cu) return 0;
+  const today = new Date().toDateString();
+  return get(K.orders).filter(o => o.buyerId === cu.id && new Date(o.date).toDateString() === today).length;
+}
+
+function placeOrder() {
+  if (!cu) { closeOverlay('productOverlay'); showPage('login'); return; }
+  if (!selProd) return;
+  if (todayOrderCount() >= 3) {
+    toast('Daily limit reached! You can only order 3 items per day.');
+    closeOverlay('productOverlay'); return;
   }
+  const order = {
+    id: 'o'+Date.now(), buyerId: cu.id, sellerId: selProd.sellerId,
+    productId: selProd.id, title: selProd.title, emoji: selProd.emoji||'📦',
+    price: selProd.price, status: 'Processing',
+    date: new Date().toISOString().split('T')[0]
+  };
+  const orders = get(K.orders);
+  orders.push(order);
+  save(K.orders, orders);
+  closeOverlay('productOverlay');
+  toast('Order placed! 🛍');
+  updateStats();
+}
 
-  // ---- current user ----
-  var me = null;
+function switchTab(tab, el) {
+  oTab = tab;
+  document.querySelectorAll('.tab-btn').forEach(t => t.classList.remove('active'));
+  el.classList.add('active');
+  renderOrders();
+}
 
-  function restoreLogin() {
-    var id = getSession();
-    if (!id) return;
-    var users = load("users");
-    for (var i = 0; i < users.length; i++) {
-      if (users[i].id === id) { me = users[i]; break; }
-    }
-    updateNav();
-  }
+function renderOrders() {
+  if (!cu) return;
+  document.getElementById('todayCount').textContent = todayOrderCount();
+  const orders = get(K.orders).filter(o => oTab === 'bought' ? o.buyerId === cu.id : o.sellerId === cu.id).reverse();
+  const el = document.getElementById('orderList');
+  if (!orders.length) { el.innerHTML = '<p style="font-size:13px;color:#777">No orders here yet.</p>'; return; }
+  const cls = s => s==='Delivered'?'b-delivered':s==='Processing'?'b-processing':'b-shipped';
+  el.innerHTML = orders.map(o => `
+    <div class="order-row">
+      <div class="o-icon">${o.emoji}</div>
+      <div class="o-info">
+        <div class="o-title">${o.title}</div>
+        <div class="o-meta">₹${Number(o.price).toLocaleString('en-IN')} &nbsp;•&nbsp; ${o.date}</div>
+      </div>
+      <span class="badge ${cls(o.status)}">${o.status}</span>
+    </div>
+  `).join('');
+}
 
-  function updateNav() {
-    if (me) {
-      document.getElementById("nav-login").style.display   = "none";
-      document.getElementById("nav-signup").style.display  = "none";
-      document.getElementById("nav-cart").style.display    = "inline";
-      document.getElementById("nav-account").style.display = "inline";
-      document.getElementById("nav-hi").style.display      = "inline";
-      document.getElementById("nav-hi").innerText          = "Hi, " + me.first + "!";
-    } else {
-      document.getElementById("nav-login").style.display   = "inline";
-      document.getElementById("nav-signup").style.display  = "inline";
-      document.getElementById("nav-cart").style.display    = "none";
-      document.getElementById("nav-account").style.display = "none";
-      document.getElementById("nav-hi").style.display      = "none";
-    }
-  }
+// ---- PROFILE ----
+function renderProfile() {
+  if (!cu) return;
+  document.getElementById('pAvatar').textContent = cu.firstName[0].toUpperCase();
+  document.getElementById('pName').textContent = cu.firstName + ' ' + cu.lastName;
+  document.getElementById('pEmail').textContent = cu.email;
+  document.getElementById('pPhone').textContent = cu.phone || '—';
+  document.getElementById('pCity').textContent = cu.city || '—';
+  document.getElementById('pJoined').textContent = cu.joined || '—';
+  const mine = get(K.products).filter(p => p.sellerId === cu.id);
+  document.getElementById('pListCount').textContent = mine.length;
+  const el = document.getElementById('myList');
+  if (!mine.length) { el.innerHTML = '<p style="font-size:13px;color:#777">No listings yet.</p>'; return; }
+  el.innerHTML = mine.reverse().map(p => `
+    <div class="my-item">
+      <div class="my-item-icon">${p.image ? `<img src="${p.image}" style="width:36px;height:36px;object-fit:cover;border-radius:3px" onerror="this.style.display='none'">` : p.emoji||'📦'}</div>
+      <div class="my-item-info">
+        <div class="my-item-title">${p.title}</div>
+        <div class="my-item-meta">₹${Number(p.price).toLocaleString('en-IN')} • ${p.category}</div>
+      </div>
+      <button class="btn-sm-red" onclick="removeListing('${p.id}')">Remove</button>
+    </div>
+  `).join('');
+}
 
-  // ---- navigation (same pattern as LearnFree show()) ----
-  function show(pageName) {
-    if ((pageName === "sell" || pageName === "cart" || pageName === "account") && !me) {
-      show("login"); return;
-    }
-    document.querySelectorAll(".page").forEach(function(p) { p.classList.remove("active"); });
-    document.querySelectorAll("nav a").forEach(function(a) { a.classList.remove("active"); });
-    document.getElementById("page-" + pageName).classList.add("active");
-    var n = document.getElementById("nav-" + pageName);
-    if (n) n.classList.add("active");
-    window.scrollTo(0, 0);
-    if (pageName === "home")    loadGrid();
-    if (pageName === "account") loadAccount();
-    if (pageName === "cart")    loadCart();
-  }
+function removeListing(id) {
+  if (!confirm('Remove this listing?')) return;
+  save(K.products, get(K.products).filter(p => p.id !== id));
+  toast('Listing removed.');
+  renderProfile();
+  renderGrid();
+}
 
-  // ---- toast (same pattern as LearnFree) ----
-  var toastTimer;
-  function toast(msg) {
-    clearTimeout(toastTimer);
-    var t = document.getElementById("toast");
-    t.innerText = msg;
-    t.style.display = "block";
-    toastTimer = setTimeout(function() { t.style.display = "none"; }, 3000);
-  }
+// ---- DELETE ACCOUNT ----
+function openDeleteModal() { document.getElementById('delConfirm').value=''; document.getElementById('deleteOverlay').classList.add('open'); }
+function doDeleteAccount() {
+  if (document.getElementById('delConfirm').value !== 'DELETE') { toast('Please type DELETE to confirm.'); return; }
+  save(K.users, get(K.users).filter(u => u.id !== cu.id));
+  save(K.products, get(K.products).filter(p => p.sellerId !== cu.id));
+  save(K.orders, get(K.orders).filter(o => o.buyerId !== cu.id && o.sellerId !== cu.id));
+  cu = null;
+  localStorage.removeItem(K.session);
+  closeOverlay('deleteOverlay');
+  refreshNav();
+  toast('Account deleted permanently.');
+  showPage('home');
+  renderGrid(); updateStats();
+}
 
-  // ---- login ----
-  function doLogin() {
-    var email = document.getElementById("l-email").value.trim();
-    var pass  = document.getElementById("l-pass").value;
-    var err   = document.getElementById("login-err");
-    err.innerText = "";
-    if (!email || !pass) { err.innerText = "Please fill in all fields."; return; }
-    var users = load("users");
-    var found = null;
-    for (var i = 0; i < users.length; i++) {
-      if (users[i].email.toLowerCase() === email.toLowerCase() && users[i].password === pass) {
-        found = users[i]; break;
-      }
-    }
-    if (!found) { err.innerText = "Wrong email or password."; return; }
-    me = found;
-    saveSession(found.id);
-    updateNav();
-    show("home");
-  }
+// ---- UTILS ----
+function showPage(name) {
+  if (['sell','orders','profile'].includes(name) && !cu) { showPage('login'); return; }
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.getElementById('page-'+name).classList.add('active');
+  if (name==='home') { renderGrid(); updateStats(); }
+  if (name==='orders') renderOrders();
+  if (name==='profile') renderProfile();
+  window.scrollTo(0,0);
+}
 
-  // ---- signup ----
-  function doSignup() {
-    var first   = document.getElementById("s-first").value.trim();
-    var last    = document.getElementById("s-last").value.trim();
-    var email   = document.getElementById("s-email").value.trim();
-    var phone   = document.getElementById("s-phone").value.trim();
-    var city    = document.getElementById("s-city").value.trim();
-    var pass    = document.getElementById("s-pass").value;
-    var confirm = document.getElementById("s-confirm").value;
-    var err     = document.getElementById("signup-err");
-    err.innerText = "";
-    if (!first || !last || !email || !phone || !city || !pass || !confirm) { err.innerText = "All fields are required."; return; }
-    if (pass.length < 6) { err.innerText = "Password must be at least 6 characters."; return; }
-    if (pass !== confirm) { err.innerText = "Passwords do not match."; return; }
-    var users = load("users");
-    for (var i = 0; i < users.length; i++) {
-      if (users[i].email.toLowerCase() === email.toLowerCase()) { err.innerText = "Email already registered."; return; }
-    }
-    var newUser = { id:"u"+Date.now(), first:first, last:last, email:email, phone:phone, city:city, password:pass };
-    users.push(newUser);
-    save("users", users);
-    me = newUser;
-    saveSession(newUser.id);
-    updateNav();
-    show("home");
-  }
+function closeOverlay(id) { document.getElementById(id).classList.remove('open'); }
+document.querySelectorAll('.overlay').forEach(o => o.addEventListener('click', e => { if(e.target===o) o.classList.remove('open'); }));
+function showErr(el, msg) { el.textContent=msg; el.style.display='block'; }
+function toast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg; t.className='show';
+  setTimeout(() => t.className='', 3000);
+}
 
-  // ---- logout ----
-  function doLogout() {
-    me = null; clearSession(); updateNav(); show("home");
-  }
+initApp();
 
-  // ---- product grid ----
-  function loadGrid() {
-    var q = document.getElementById("search").value.toLowerCase();
-    var products = load("products");
-    var list = [];
-    for (var i = 0; i < products.length; i++) {
-      var p = products[i];
-      if (p.title.toLowerCase().indexOf(q) !== -1 || (p.price && p.price.toString().indexOf(q) !== -1)) {
-        list.push(p);
-      }
-    }
-    list.sort(function(a, b) { return b.on - a.on; });
-    var grid = document.getElementById("grid");
-    if (list.length === 0) { grid.innerHTML = "<p style='color:#777'>No products found.</p>"; return; }
-    var html = "";
-    for (var i = 0; i < list.length; i++) {
-      var p = list[i];
-      html += '<div class="card">';
-      html += '<img src="' + p.photo + '" alt="" onerror="this.style.display=\'none\'">';
-      html += '<div class="body">';
-      html += '<p><strong>' + p.title + '</strong></p>';
-      html += '<p class="price">Rs.' + p.price + '</p>';
-      html += '<p>' + p.cond + '</p>';
-      html += '<p class="seller">' + p.sname + '</p>';
-      html += '</div>';
-
-      // show buttons only if logged in and not the seller's own product
-      if (me && me.id !== p.sid) {
-        html += '<div class="card-btns">';
-        html += '<button class="btn-outline" onclick="addToCart(\'' + p.id + '\')">Add to Cart</button>';
-        html += '<button onclick="doOrder(\'' + p.id + '\')">Order Now</button>';
-        html += '</div>';
-      } else if (!me) {
-        html += '<div class="card-btns">';
-        html += '<button onclick="show(\'login\')">Login to Order</button>';
-        html += '</div>';
-      }
-
-      html += '</div>';
-    }
-    grid.innerHTML = html;
-  }
-
-  // ---- order now ----
-  function doOrder(id) {
-    if (!me) { show("login"); return; }
-    var products = load("products");
-    var p = null;
-    for (var i = 0; i < products.length; i++) { if (products[i].id === id) { p = products[i]; break; } }
-    if (!p) return;
-    var orders = load("orders");
-    orders.push({ id:"o"+Date.now(), bid:me.id, sid:p.sid, title:p.title, photo:p.photo, price:p.price, status:"Processing", date:new Date().toISOString().split("T")[0] });
-    save("orders", orders);
-    toast("Order placed!");
-  }
-
-  // ---- cart ----
-  function cartKey() { return "cart_" + me.id; }
-
-  function addToCart(id) {
-    if (!me) { show("login"); return; }
-    var products = load("products");
-    var p = null;
-    for (var i = 0; i < products.length; i++) { if (products[i].id === id) { p = products[i]; break; } }
-    if (!p) return;
-    var cart = load(cartKey());
-    for (var i = 0; i < cart.length; i++) {
-      if (cart[i].pid === id) { toast("Already in cart!"); return; }
-    }
-    cart.push({ pid:p.id, sid:p.sid, title:p.title, photo:p.photo, price:p.price });
-    save(cartKey(), cart);
-    toast("Added to cart!");
-  }
-
-  function loadCart() {
-    if (!me) return;
-    var cart   = load(cartKey());
-    var listEl = document.getElementById("cart-list");
-    var totEl  = document.getElementById("cart-total");
-    var btnEl  = document.getElementById("cart-order-btn");
-    if (cart.length === 0) {
-      listEl.innerHTML = "<p style='color:#777;font-size:13px'>Your cart is empty.</p>";
-      totEl.innerText = ""; btnEl.innerHTML = ""; return;
-    }
-    var html = ""; var total = 0;
-    for (var i = 0; i < cart.length; i++) {
-      var c = cart[i];
-      total += Number(c.price);
-      html += '<div class="row">';
-      html += '<img src="' + c.photo + '" alt="" onerror="this.style.display=\'none\'">';
-      html += '<div class="info"><strong>' + c.title + '</strong><br>Rs.' + c.price + '</div>';
-      html += '<button onclick="removeFromCart(\'' + c.pid + '\')" style="background:white;color:red;border:1px solid red">Remove</button>';
-      html += '</div>';
-    }
-    listEl.innerHTML = html;
-    totEl.innerText  = "Total: Rs." + total;
-    btnEl.innerHTML  = '<button onclick="orderCart()">Order All Items</button>';
-  }
-
-  function removeFromCart(pid) {
-    var cart = load(cartKey());
-    for (var i = 0; i < cart.length; i++) {
-      if (cart[i].pid === pid) { cart.splice(i, 1); break; }
-    }
-    save(cartKey(), cart); loadCart(); toast("Removed from cart.");
-  }
-
-  function orderCart() {
-    if (!me) return;
-    var cart = load(cartKey());
-    if (cart.length === 0) return;
-    var orders = load("orders");
-    for (var i = 0; i < cart.length; i++) {
-      var c = cart[i];
-      orders.push({ id:"o"+Date.now()+i, bid:me.id, sid:c.sid, title:c.title, photo:c.photo, price:c.price, status:"Processing", date:new Date().toISOString().split("T")[0] });
-    }
-    save("orders", orders); save(cartKey(), []);
-    toast("All items ordered!"); show("account");
-  }
-
-  // ---- sell ----
-  var photoData = "";
-
-  function previewPhoto(e) {
-    var file = e.target.files[0]; if (!file) return;
-    var reader = new FileReader();
-    reader.onload = function(x) {
-      photoData = x.target.result;
-      document.getElementById("photo-preview").src = photoData;
-      document.getElementById("photo-preview").style.display = "block";
-    };
-    reader.readAsDataURL(file);
-  }
-
-  function doSell() {
-    if (!me) return;
-    var title = document.getElementById("p-title").value.trim();
-    var price = document.getElementById("p-price").value.trim();
-    var desc  = document.getElementById("p-desc").value.trim();
-    var err   = document.getElementById("sell-err");
-    var ok    = document.getElementById("sell-ok");
-    err.innerText = ""; ok.innerText = "";
-    if (!title || !price || !desc) { err.innerText = "Title, Price and Description are required."; return; }
-    var newProduct = {
-      id:"p"+Date.now(), sid:me.id, sname:me.first+" "+me.last[0]+".",
-      title:title, cond:document.getElementById("p-cond").value,
-      price:price, desc:desc, photo:photoData, on:Date.now()
-    };
-    var products = load("products"); products.push(newProduct); save("products", products);
-    ok.innerText = "Listed! Redirecting...";
-    photoData = "";
-    document.getElementById("photo-preview").style.display = "none";
-    ["p-title","p-price","p-desc"].forEach(function(id) { document.getElementById(id).value = ""; });
-    setTimeout(function() { ok.innerText = ""; show("account"); }, 1200);
-  }
-
-  // ---- account page ----
-  function loadAccount() {
-    if (!me) return;
-    document.getElementById("orders-section").style.display = "none";
-    document.getElementById("a-name").innerText  = me.first + " " + me.last;
-    document.getElementById("a-email").innerText = me.email;
-    document.getElementById("a-phone").innerText = me.phone || "-";
-    document.getElementById("a-city").innerText  = me.city  || "-";
-    var products = load("products"); var mine = [];
-    for (var i = 0; i < products.length; i++) { if (products[i].sid === me.id) mine.push(products[i]); }
-    mine.reverse();
-    document.getElementById("a-count").innerText = mine.length;
-    var el = document.getElementById("my-listings");
-    if (mine.length === 0) { el.innerHTML = "<p style='color:#777;font-size:13px'>No listings yet.</p>"; return; }
-    var html = "";
-    for (var i = 0; i < mine.length; i++) {
-      var p = mine[i];
-      html += '<div class="row"><div class="info"><strong>' + p.title + '</strong></div>';
-      html += '<button onclick="removeListing(\'' + p.id + '\')" style="background:white;color:red;border:1px solid red">Remove</button></div>';
-    }
-    el.innerHTML = html;
-  }
-
-  function removeListing(id) {
-    if (!confirm("Remove this listing?")) return;
-    var products = load("products");
-    for (var i = 0; i < products.length; i++) {
-      if (products[i].id === id) { products.splice(i, 1); break; }
-    }
-    save("products", products); loadAccount();
-  }
-
-  // ---- orders ----
-  function toggleOrders() {
-    var section = document.getElementById("orders-section");
-    if (section.style.display === "none") { section.style.display = "block"; loadOrders(); }
-    else { section.style.display = "none"; }
-  }
-
-  function loadOrders() {
-    if (!me) return;
-    var orders = load("orders"); var mine = [];
-    for (var i = 0; i < orders.length; i++) {
-      if (orders[i].bid === me.id || orders[i].sid === me.id) mine.push(orders[i]);
-    }
-    mine.reverse();
-    var el = document.getElementById("orders-list");
-    if (mine.length === 0) { el.innerHTML = "<p style='color:#777;font-size:13px'>No orders yet.</p>"; return; }
-    var html = "";
-    for (var i = 0; i < mine.length; i++) {
-      var o = mine[i];
-      var cls = o.status === "Delivered" ? "delivered" : o.status === "Shipped" ? "shipped" : "processing";
-      html += '<div class="row">';
-      html += '<img src="' + o.photo + '" alt="" onerror="this.style.display=\'none\'">';
-      html += '<div class="info"><strong>' + o.title + '</strong><br>Rs.' + o.price + ' — ' + o.date + '</div>';
-      html += '<span class="status ' + cls + '">' + o.status + '</span>';
-      html += '</div>';
-    }
-    el.innerHTML = html;
-  }
-
-  // ---- delete account ----
-  function doDeleteAccount() {
-    var users = load("users");
-    for (var i = 0; i < users.length; i++) {
-      if (users[i].id === me.id) { users.splice(i, 1); break; }
-    }
-    save("users", users);
-
-    var products = load("products");
-    for (var i = products.length - 1; i >= 0; i--) {
-      if (products[i].sid === me.id) products.splice(i, 1);
-    }
-    save("products", products);
-
-    var orders = load("orders");
-    for (var i = orders.length - 1; i >= 0; i--) {
-      if (orders[i].bid === me.id || orders[i].sid === me.id) orders.splice(i, 1);
-    }
-    save("orders", orders);
-
-    localStorage.removeItem(cartKey());
-    me = null; clearSession(); updateNav(); show("home");
-  }
-
-  // ---- start ----
-  seedData();
-  restoreLogin();
-  loadGrid();
-
+// helper: open browser console and run resetSeed() if photos don't show
+function resetSeed() {
+  ['tn_seeded2','tn_seeded3','tn_seeded4','tn_seeded5','tn_products'].forEach(k => localStorage.removeItem(k));
+  location.reload();
+}
 </script>
 </body>
 </html>
