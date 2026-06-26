@@ -1,285 +1,140 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-  <title>TradeNest</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>TradeNest — Buy & Sell Anything</title>
   <style>
+    body { font-family: Arial, sans-serif; margin: 0; background: #f2f2f2; }
 
-    body {
-      font-family: Arial, sans-serif;
-      margin: 0;
-      padding: 0;
-      background: #f2f2f2;
-    }
-
-    /* navbar */
-    .navbar {
+    nav {
       background: red;
-      color: white;
-      padding: 12px 20px;
+      padding: 10px 20px;
       display: flex;
-      justify-content: space-between;
       align-items: center;
+      gap: 6px;
     }
-    .navbar h1 {
-      margin: 0;
-      font-size: 22px;
-      cursor: pointer;
-    }
-    .navbar a {
+    .logo { color: white; font-size: 20px; font-weight: bold; cursor: pointer; margin-right: auto; }
+    nav a {
       color: white;
-      text-decoration: none;
       border: 1px solid white;
       padding: 4px 10px;
       border-radius: 4px;
-      margin-left: 8px;
       font-size: 13px;
       cursor: pointer;
+      text-decoration: none;
     }
-    .navbar a:hover {
-      background: white;
-      color: red;
-    }
-    .cart-badge {
-      background: white;
-      color: red;
-      border-radius: 50%;
-      font-size: 11px;
-      font-weight: bold;
-      padding: 1px 5px;
-    }
+    nav a:hover { background: white; color: red; }
+    nav a.active { background: white; color: red; }
+    nav span.hi { color: white; font-size: 13px; }
 
-    /* pages - only .show is visible */
-    .page {
-      display: none;
-      max-width: 900px;
-      margin: auto;
-      padding: 20px;
-    }
-    .page.show {
-      display: block;
-    }
+    .page { display: none; }
+    .page.active { display: block; }
 
-    /* headings */
-    h2 {
-      border-left: 4px solid red;
-      padding-left: 8px;
-    }
+    .wrap { max-width: 900px; margin: auto; padding: 20px; }
 
-    /* hero banner */
     .banner {
       background: red;
       color: white;
       text-align: center;
-      padding: 25px;
-      border-radius: 6px;
-      margin-bottom: 20px;
+      padding: 30px 20px;
+      margin-bottom: 16px;
     }
-    .banner h2 {
-      border: none;
-      color: white;
-      font-size: 26px;
-      margin: 0 0 8px 0;
-    }
-    .banner p {
-      margin: 0 0 12px 0;
-      font-size: 14px;
-    }
-    .banner button {
-      background: white;
-      color: red;
-      margin-right: 8px;
-    }
-    .banner button.outline {
-      background: transparent;
-      border: 1px solid white;
-      color: white;
-    }
+    .banner h1 { margin: 0 0 6px 0; font-size: 26px; }
+    .banner p  { margin: 0; font-size: 14px; }
 
-    /* product grid */
-    .grid {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 15px;
-      margin-top: 10px;
-    }
+    .grid { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 10px; }
     .card {
       background: white;
       border: 1px solid #ccc;
-      border-radius: 6px;
-      width: 200px;
+      width: 195px;
       cursor: pointer;
     }
-    .card:hover {
-      border-color: red;
-    }
-    .card img {
-      width: 100%;
-      height: 140px;
-      object-fit: cover;
-      border-radius: 6px 6px 0 0;
-    }
-    .card .card-info {
-      padding: 8px;
-    }
-    .card .card-info p {
-      margin: 3px 0;
-      font-size: 13px;
-    }
-    .card .card-price {
-      color: red;
-      font-weight: bold;
-      font-size: 15px;
-    }
-    .card .card-seller {
-      color: #888;
-      font-size: 12px;
-    }
+    .card:hover { border-color: red; }
+    .card img { width: 100%; height: 135px; object-fit: cover; display: block; }
+    .card .body { padding: 8px; }
+    .card .body p { margin: 2px 0; font-size: 13px; }
+    .card .price { color: red; font-weight: bold; }
+    .card .seller { color: #888; font-size: 12px; }
 
-    /* forms */
-    label {
-      display: block;
-      font-size: 14px;
-      font-weight: bold;
-      margin-top: 10px;
-      margin-bottom: 3px;
-    }
+    h2 { font-size: 18px; margin-bottom: 12px; }
+
+    label { display: block; font-size: 13px; font-weight: bold; margin-top: 8px; margin-bottom: 2px; }
     input, select, textarea {
       width: 100%;
-      padding: 8px;
+      padding: 7px;
       border: 1px solid #ccc;
-      border-radius: 4px;
-      font-size: 14px;
+      font-size: 13px;
       box-sizing: border-box;
-      margin-bottom: 4px;
     }
-    input:focus, select:focus, textarea:focus {
-      border-color: red;
-      outline: none;
-    }
-    textarea {
-      resize: vertical;
-    }
-    .two-col {
-      display: flex;
-      gap: 15px;
-    }
-    .two-col > div {
-      flex: 1;
-    }
+    input:focus, select:focus, textarea:focus { border-color: red; outline: none; }
+    textarea { resize: vertical; }
+    .two { display: flex; gap: 12px; }
+    .two > div { flex: 1; }
 
-    /* buttons */
     button {
       background: red;
       color: white;
       border: none;
-      padding: 9px 20px;
-      border-radius: 4px;
+      padding: 8px 16px;
+      font-size: 13px;
       cursor: pointer;
-      font-size: 14px;
-      margin-top: 10px;
+      margin-top: 8px;
     }
-    button:hover {
-      background: darkred;
-    }
+    button:hover { background: darkred; }
 
-    /* error and success messages */
-    .error {
-      color: red;
-      font-size: 13px;
-      margin-bottom: 8px;
-    }
-    .success {
-      color: green;
-      font-size: 13px;
-      margin-bottom: 8px;
-    }
+    .err { color: red; font-size: 13px; margin-bottom: 6px; }
+    .ok  { color: green; font-size: 13px; margin-bottom: 6px; }
 
-    /* image upload box */
     .upload-box {
       border: 2px dashed #ccc;
-      padding: 15px;
       text-align: center;
-      border-radius: 4px;
+      padding: 14px;
       cursor: pointer;
       color: #777;
       font-size: 13px;
-      margin-bottom: 8px;
+      margin-top: 3px;
     }
-    .upload-box:hover {
-      border-color: red;
-      color: red;
-    }
-    #img-preview {
-      display: none;
-      width: 100%;
-      max-height: 150px;
-      object-fit: cover;
-      border-radius: 4px;
-      margin-bottom: 10px;
-    }
+    .upload-box:hover { border-color: red; color: red; }
+    #photo-preview { display: none; width: 100%; max-height: 150px; object-fit: cover; margin-top: 6px; }
 
-    /* popup overlay */
-    .popup-bg {
-      display: none;
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background: rgba(0, 0, 0, 0.5);
-      z-index: 100;
-      justify-content: center;
+    .card-btns { display: flex; gap: 6px; padding: 0 8px 8px; }
+    .card-btns button { margin-top: 0; flex: 1; padding: 6px 8px; font-size: 12px; }
+    .btn-outline { background: white; color: red; border: 1px solid red; }
+    .btn-outline:hover { background: red; color: white; }
+
+    table { width: 100%; border-collapse: collapse; margin-bottom: 14px; }
+    td { padding: 7px 10px; border: 1px solid #ddd; font-size: 13px; }
+    td:first-child { background: #f5f5f5; font-weight: bold; width: 110px; }
+
+    .row {
+      display: flex;
       align-items: center;
-    }
-    .popup-bg.show {
-      display: flex;
-    }
-    .popup {
-      background: white;
-      padding: 20px;
-      border-radius: 8px;
-      width: 90%;
-      max-width: 420px;
-      max-height: 90vh;
-      overflow-y: auto;
-    }
-    .popup img {
-      width: 100%;
-      height: 200px;
-      object-fit: cover;
-      border-radius: 6px;
-      margin-bottom: 10px;
-    }
-    .popup h3 {
-      margin: 0 0 5px 0;
-    }
-    .popup .popup-price {
-      color: red;
-      font-size: 20px;
-      font-weight: bold;
-    }
-    .popup p {
-      font-size: 13px;
-      color: #555;
-      margin: 4px 0;
-    }
-    .popup-btns {
-      display: flex;
       gap: 10px;
-      margin-top: 12px;
-      flex-wrap: wrap;
-    }
-    .btn-gray {
-      background: #ccc;
-      color: #333;
-    }
-    .btn-white {
+      border: 1px solid #ddd;
+      padding: 8px;
+      margin-bottom: 6px;
       background: white;
-      color: red;
-      border: 1px solid red;
+      font-size: 13px;
     }
+    .row img { width: 44px; height: 44px; object-fit: cover; flex-shrink: 0; }
+    .row .info { flex: 1; }
+    .row button { margin-top: 0; padding: 4px 8px; font-size: 12px; }
 
-    /* toast */
+    .status { font-size: 11px; font-weight: bold; padding: 2px 7px; border-radius: 8px; }
+    .delivered  { background: #d4edda; color: green; }
+    .shipped    { background: #cce5ff; color: #004; }
+    .processing { background: #fff3cd; color: #856404; }
+
+    .action-btns { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 16px; }
+    .action-btns button { margin-top: 0; }
+    .btn-outline { background: white; color: red; border: 1px solid red; }
+    .btn-outline:hover { background: red; color: white; }
+    .btn-gray { background: #666; border: none; }
+    .btn-gray:hover { background: #444; }
+
+    .cart-total { font-size: 14px; font-weight: bold; color: red; margin: 8px 0; }
+
     #toast {
       position: fixed;
       bottom: 20px;
@@ -291,544 +146,273 @@
       font-size: 13px;
       display: none;
       z-index: 999;
+      border-left: 4px solid red;
     }
-
-    /* profile table */
-    table {
-      width: 100%;
-      border-collapse: collapse;
-      margin-bottom: 15px;
-    }
-    table td {
-      padding: 8px 10px;
-      border: 1px solid #ddd;
-      font-size: 14px;
-    }
-    table td:first-child {
-      background: #f5f5f5;
-      font-weight: bold;
-      width: 130px;
-    }
-
-    /* rows used in orders, cart, listings */
-    .item-row {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      border: 1px solid #ddd;
-      border-radius: 4px;
-      padding: 10px;
-      margin-bottom: 8px;
-      background: white;
-      font-size: 13px;
-    }
-    .item-row img {
-      width: 45px;
-      height: 45px;
-      object-fit: cover;
-      border-radius: 4px;
-      flex-shrink: 0;
-    }
-    .item-row .item-info {
-      flex: 1;
-    }
-
-    /* order status badges */
-    .badge {
-      padding: 3px 8px;
-      border-radius: 10px;
-      font-size: 12px;
-      font-weight: bold;
-    }
-    .delivered { background: #d4edda; color: green; }
-    .processing { background: #fff3cd; color: #856404; }
-    .shipped    { background: #cce5ff; color: #004085; }
-
-    /* tabs for orders page */
-    .tab-row {
-      display: flex;
-      border-bottom: 2px solid red;
-      margin-bottom: 14px;
-    }
-    .tab {
-      padding: 6px 16px;
-      cursor: pointer;
-      font-size: 13px;
-      font-weight: bold;
-      background: #eee;
-      border: none;
-      margin-top: 0;
-    }
-    .tab.active {
-      background: red;
-      color: white;
-    }
-
-    /* note box */
-    .note {
-      background: #fff3cd;
-      border: 1px solid #ffc107;
-      padding: 8px 12px;
-      border-radius: 4px;
-      font-size: 13px;
-      margin-bottom: 12px;
-    }
-
-    /* cart total */
-    .cart-total {
-      font-size: 15px;
-      font-weight: bold;
-      color: red;
-      margin: 10px 0;
-    }
-
-    /* danger box for delete account */
-    .danger-box {
-      border: 1px solid red;
-      padding: 14px;
-      border-radius: 6px;
-      margin-top: 20px;
-    }
-    .danger-box h3 {
-      color: red;
-      margin: 0 0 8px 0;
-    }
-    .danger-box p {
-      font-size: 13px;
-      color: #555;
-      margin-bottom: 10px;
-    }
-
   </style>
 </head>
 <body>
 
-<!-- NAVBAR -->
-<div class="navbar">
-  <h1 onclick="goTo('home')">TradeNest</h1>
-  <div>
-    <a onclick="goTo('home')">Home</a>
-    <a id="nav-login"   onclick="goTo('login')">Login</a>
-    <a id="nav-signup"  onclick="goTo('signup')">Sign Up</a>
-    <a id="nav-cart"    onclick="goTo('cart')"    style="display:none">Cart <span class="cart-badge" id="cart-count">0</span></a>
-    <a id="nav-profile" onclick="goTo('profile')" style="display:none">My Account</a>
-    <span id="nav-hi" style="display:none; color:white; font-size:13px; margin-left:8px;"></span>
-  </div>
-</div>
+<!-- NAV -->
+<nav>
+  <span class="logo" onclick="show('home')">TradeNest</span>
+  <a onclick="show('home')"    id="nav-home"    class="active">Home</a>
+  <a onclick="show('login')"   id="nav-login">Login</a>
+  <a onclick="show('signup')"  id="nav-signup">Sign Up</a>
+  <a onclick="show('cart')"    id="nav-cart"    style="display:none">Cart</a>
+  <a onclick="show('account')" id="nav-account" style="display:none">My Account</a>
+  <span class="hi" id="nav-hi" style="display:none"></span>
+</nav>
 
-<!-- TOAST NOTIFICATION -->
 <div id="toast"></div>
 
 
-<!-- ===== HOME PAGE ===== -->
-<div class="page show" id="page-home">
-
+<!-- HOME PAGE -->
+<div class="page active" id="page-home">
   <div class="banner">
-    <h2>Buy &amp; Sell Anything</h2>
-    <p>A simple marketplace. Find great deals or sell your stuff!</p>
-    <button onclick="goTo('signup')">Start Selling</button>
-    <button class="outline" onclick="document.getElementById('browse').scrollIntoView()">Browse Items</button>
+    <h1>Buy &amp; Sell Anything</h1>
+    <p>Simple marketplace. Find great deals or sell your stuff!</p>
   </div>
-
-  <div id="browse">
-    <input type="text" id="search-box" placeholder="Search products..." oninput="showProducts()" style="margin-bottom:12px">
+  <div class="wrap">
+    <input type="text" id="search" placeholder="Search products..." oninput="loadGrid()" style="margin-bottom:12px">
     <h2>All Listings</h2>
-    <div class="grid" id="product-grid"></div>
+    <div class="grid" id="grid"></div>
   </div>
-
 </div>
 
 
-<!-- ===== LOGIN PAGE ===== -->
+<!-- LOGIN PAGE -->
 <div class="page" id="page-login">
-  <h2>Login</h2>
-  <p id="login-err" class="error"></p>
-
-  <label>Email</label>
-  <input type="email" id="login-email" placeholder="your@email.com">
-
-  <label>Password</label>
-  <input type="password" id="login-pass" placeholder="Password">
-
-  <button onclick="doLogin()">Login</button>
-
-  <p style="font-size:13px; margin-top:10px;">
-    No account? <a onclick="goTo('signup')" style="color:red; cursor:pointer;">Sign up here</a>
-  </p>
+  <div class="wrap">
+    <h2>Login</h2>
+    <p id="login-err" class="err"></p>
+    <label>Email</label>
+    <input type="email" id="l-email" placeholder="your@email.com">
+    <label>Password</label>
+    <input type="password" id="l-pass" placeholder="Password">
+    <br>
+    <button onclick="doLogin()">Login</button>
+    <p style="font-size:13px;margin-top:10px">No account? <a onclick="show('signup')" style="color:red;cursor:pointer">Sign up</a></p>
+  </div>
 </div>
 
 
-<!-- ===== SIGNUP PAGE ===== -->
+<!-- SIGNUP PAGE -->
 <div class="page" id="page-signup">
-  <h2>Create Account</h2>
-  <p id="signup-err" class="error"></p>
-
-  <div class="two-col">
-    <div>
-      <label>First Name</label>
-      <input type="text" id="s-first" placeholder="Ravi">
+  <div class="wrap">
+    <h2>Create Account</h2>
+    <p id="signup-err" class="err"></p>
+    <div class="two">
+      <div><label>First Name</label><input type="text" id="s-first" placeholder="Ravi"></div>
+      <div><label>Last Name</label><input type="text" id="s-last" placeholder="Kumar"></div>
     </div>
-    <div>
-      <label>Last Name</label>
-      <input type="text" id="s-last" placeholder="Kumar">
-    </div>
+    <label>Email</label>
+    <input type="email" id="s-email" placeholder="your@email.com">
+    <label>Phone</label>
+    <input type="tel" id="s-phone" placeholder="9876543210">
+    <label>City</label>
+    <input type="text" id="s-city" placeholder="Chennai">
+    <label>Password (min 6 characters)</label>
+    <input type="password" id="s-pass" placeholder="Password">
+    <label>Confirm Password</label>
+    <input type="password" id="s-confirm" placeholder="Type password again">
+    <br>
+    <button onclick="doSignup()">Create Account</button>
+    <p style="font-size:13px;margin-top:10px">Already registered? <a onclick="show('login')" style="color:red;cursor:pointer">Login</a></p>
   </div>
-
-  <label>Email</label>
-  <input type="email" id="s-email" placeholder="your@email.com">
-
-  <label>Phone Number</label>
-  <input type="tel" id="s-phone" placeholder="9876543210">
-
-  <label>City</label>
-  <input type="text" id="s-city" placeholder="Chennai">
-
-  <label>Password (min 6 characters)</label>
-  <input type="password" id="s-pass" placeholder="Password">
-
-  <label>Confirm Password</label>
-  <input type="password" id="s-confirm" placeholder="Confirm password">
-
-  <button onclick="doSignup()">Create Account</button>
-
-  <p style="font-size:13px; margin-top:10px;">
-    Already have an account? <a onclick="goTo('login')" style="color:red; cursor:pointer;">Login</a>
-  </p>
 </div>
 
 
-<!-- ===== SELL PAGE ===== -->
+<!-- SELL PAGE -->
 <div class="page" id="page-sell">
-  <h2>List a Product for Sale</h2>
-  <p id="sell-err" class="error"></p>
-  <p id="sell-ok" class="success"></p>
+  <div class="wrap">
+    <h2>List a Product for Sale</h2>
+    <p id="sell-err" class="err"></p>
+    <p id="sell-ok" class="ok"></p>
 
-  <label>Product Photo</label>
-  <div class="upload-box" onclick="document.getElementById('img-file').click()">
-    Click here to upload a photo
-    <input type="file" id="img-file" accept="image/*" style="display:none" onchange="previewImg(event)">
+    <label>Product Photo</label>
+    <div class="upload-box" onclick="document.getElementById('photo-input').click()">
+      Click here to upload a photo
+      <input type="file" id="photo-input" accept="image/*" style="display:none" onchange="previewPhoto(event)">
+    </div>
+    <img id="photo-preview" src="" alt="preview">
+
+    <label>Title *</label>
+    <input type="text" id="p-title" placeholder="e.g. iPhone 13 128GB">
+
+    <label>Price (Rs.) *</label>
+    <input type="text" id="p-price" placeholder="e.g. 5000">
+
+    <label>Condition</label>
+    <select id="p-cond">
+      <option>Like New</option>
+      <option>Good</option>
+      <option>Fair</option>
+      <option>For Parts</option>
+    </select>
+
+    <label>Description *</label>
+    <textarea id="p-desc" rows="3"></textarea>
+
+    <br>
+    <button onclick="doSell()">Post Listing</button>
   </div>
-  <img id="img-preview" src="" alt="preview">
-
-  <label>Product Title *</label>
-  <input type="text" id="p-title" placeholder="e.g. iPhone 13 128GB">
-
-  <div class="two-col">
-    <div>
-      <label>Category *</label>
-      <select id="p-cat">
-        <option value="">Select category</option>
-        <option>Electronics</option>
-        <option>Clothing &amp; Fashion</option>
-        <option>Books</option>
-        <option>Furniture</option>
-        <option>Sports &amp; Fitness</option>
-        <option>Toys &amp; Games</option>
-        <option>Automotive</option>
-        <option>Home &amp; Garden</option>
-        <option>Other</option>
-      </select>
-    </div>
-    <div>
-      <label>Condition</label>
-      <select id="p-cond">
-        <option>Like New</option>
-        <option>Good</option>
-        <option>Fair</option>
-        <option>For Parts</option>
-      </select>
-    </div>
-  </div>
-
-  <div class="two-col">
-    <div>
-      <label>Brand</label>
-      <input type="text" id="p-brand" placeholder="Apple, Samsung...">
-    </div>
-    <div>
-      <label>Model / Version</label>
-      <input type="text" id="p-version" placeholder="v2, 2023 Edition...">
-    </div>
-  </div>
-
-  <div class="two-col">
-    <div>
-      <label>Price (Rs.) *</label>
-      <input type="number" id="p-price" placeholder="5000" min="1">
-    </div>
-    <div>
-      <label>How long used?</label>
-      <input type="text" id="p-age" placeholder="6 months, 1 year">
-    </div>
-  </div>
-
-  <label>Description *</label>
-  <textarea id="p-desc" rows="3" placeholder="Describe the item - condition, reason for selling, any defects..."></textarea>
-
-  <label>Your City / Location</label>
-  <input type="text" id="p-loc" placeholder="Chennai">
-
-  <button onclick="doSell()">Post Listing</button>
 </div>
 
 
-<!-- ===== CART PAGE ===== -->
+<!-- CART PAGE -->
 <div class="page" id="page-cart">
-  <h2>My Cart</h2>
-  <div id="cart-list"></div>
-  <div class="cart-total" id="cart-total"></div>
-  <div id="cart-checkout"></div>
+  <div class="wrap">
+    <h2>My Cart</h2>
+    <div id="cart-list"></div>
+    <p class="cart-total" id="cart-total"></p>
+    <div id="cart-order-btn"></div>
+  </div>
 </div>
 
 
+<!-- ACCOUNT PAGE -->
+<div class="page" id="page-account">
+  <div class="wrap">
+    <h2>My Account</h2>
 
+    <table>
+      <tr><td>Name</td>    <td id="a-name"></td></tr>
+      <tr><td>Email</td>   <td id="a-email"></td></tr>
+      <tr><td>Phone</td>   <td id="a-phone"></td></tr>
+      <tr><td>City</td>    <td id="a-city"></td></tr>
+      <tr><td>Listings</td><td id="a-count"></td></tr>
+    </table>
 
-<!-- ===== PROFILE PAGE ===== -->
-<div class="page" id="page-profile">
-  <h2>My Account</h2>
-  <table>
-    <tr><td>Name</td>          <td id="prof-name"></td></tr>
-    <tr><td>Email</td>         <td id="prof-email"></td></tr>
-    <tr><td>Phone</td>         <td id="prof-phone"></td></tr>
-    <tr><td>City</td>          <td id="prof-city"></td></tr>
-    <tr><td>Member Since</td>  <td id="prof-joined"></td></tr>
-    <tr><td>Total Listings</td><td id="prof-count"></td></tr>
-  </table>
-
-  <!-- quick action buttons -->
-  <div style="display:flex; gap:10px; flex-wrap:wrap; margin-bottom:20px;">
-    <button onclick="goTo('sell')" style="margin-top:0;">+ Sell a Product</button>
-    <button onclick="showAccountOrders()" style="margin-top:0; background:white; color:red; border:1px solid red;">My Orders</button>
-    <button onclick="doLogout()" style="margin-top:0; background:#555; color:white; border:none;">Logout</button>
-  </div>
-
-  <!-- orders section (hidden by default, shown when clicking My Orders) -->
-  <div id="account-orders-section" style="display:none;">
-    <h2>My Orders</h2>
-    <div class="note">Orders today: <strong id="today-count2">0</strong> / 3 &nbsp; (limit resets at midnight)</div>
-    <div class="tab-row">
-      <button class="tab active" onclick="switchTab2('bought', this)">Items I Bought</button>
-      <button class="tab"        onclick="switchTab2('sold', this)">Items I Sold</button>
+    <div class="action-btns">
+      <button onclick="show('sell')">+ Sell a Product</button>
+      <button class="btn-outline" onclick="toggleOrders()">My Orders</button>
+      <button class="btn-gray" onclick="doLogout()">Logout</button>
     </div>
-    <div id="order-list2"></div>
-  </div>
 
-  <div style="display:flex; justify-content:space-between; align-items:center;">
+    <div id="orders-section" style="display:none">
+      <h2>My Orders</h2>
+      <div id="orders-list"></div>
+    </div>
+
     <h2>My Listings</h2>
-  </div>
-  <div id="my-listings"></div>
+    <div id="my-listings"></div>
 
-  <div class="danger-box">
-    <h3>Delete Account</h3>
-    <p>This will permanently delete your account, all listings and order history. This CANNOT be undone.</p>
-    <button onclick="openDeletePopup()" class="btn-white" style="margin-top:0;">Delete My Account</button>
-  </div>
-</div>
-
-
-<!-- ===== PRODUCT DETAIL POPUP ===== -->
-<div class="popup-bg" id="product-popup">
-  <div class="popup">
-    <div id="popup-body"></div>
-    <div class="popup-btns">
-      <button class="btn-gray" onclick="closePopup('product-popup')">Close</button>
-      <button class="btn-white" id="cart-btn" onclick="addToCart()">Add to Cart</button>
-      <button id="order-btn" onclick="doOrder()">Order Now</button>
+    <div style="margin-top:20px">
+      <h3 style="color:red;margin-bottom:6px">Delete Account</h3>
+      <p style="font-size:13px;color:#555;margin-bottom:8px">This will permanently delete your account, listings and orders. Cannot be undone.</p>
+      <button onclick="doDeleteAccount()" class="btn-outline">Delete My Account</button>
     </div>
   </div>
 </div>
 
-
-<!-- ===== DELETE ACCOUNT POPUP ===== -->
-<div class="popup-bg" id="delete-popup">
-  <div class="popup">
-    <h3 style="color:red;">Delete Account Forever?</h3>
-    <p>All your data will be gone permanently. You cannot get it back.</p>
-    <p><strong>Type DELETE below to confirm:</strong></p>
-    <input type="text" id="delete-confirm" placeholder="Type DELETE here">
-    <div class="popup-btns">
-      <button class="btn-gray" onclick="closePopup('delete-popup')">Cancel</button>
-      <button onclick="doDeleteAccount()">Yes, Delete Everything</button>
-    </div>
-  </div>
-</div>
 
 
 <script>
 
-  // ============================================================
-  // STORAGE HELPERS
-  // ============================================================
+  // ---- storage helpers ----
+  function save(key, val) { localStorage.setItem(key, JSON.stringify(val)); }
+  function load(key) {
+    var d = localStorage.getItem(key);
+    return d ? JSON.parse(d) : [];
+  }
+  function saveSession(id) { localStorage.setItem("uid", id); }
+  function getSession()    { return localStorage.getItem("uid"); }
+  function clearSession()  { localStorage.removeItem("uid"); }
 
-  function saveData(key, value) {
-    localStorage.setItem(key, JSON.stringify(value));
+  // ---- seed demo products (runs once) ----
+  function seedData() {
+    if (localStorage.getItem("seeded") === "v2") return;
+    save("products", [
+      { id:"p1",  sid:"", sname:"TradeNest", title:"iPhone 13 128GB",            cat:"Electronics",      cond:"Good",     brand:"Apple",  ver:"iPhone 13",   price:"48000", age:"1 year",    city:"Chennai",   desc:"Single owner. No scratches. Original charger included.",           photo:"https://images.unsplash.com/photo-1591337676887-a217a6970a8a?w=500&q=80", on:Date.now()-9*86400000 },
+      { id:"p2",  sid:"", sname:"TradeNest", title:"Sony WH-1000XM4 Headphones", cat:"Electronics",      cond:"Like New", brand:"Sony",   ver:"XM4",         price:"15000", age:"3 months",  city:"Bangalore", desc:"Used rarely. Original box. Noise cancellation works perfectly.",   photo:"https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=500&q=80", on:Date.now()-7*86400000 },
+      { id:"p3",  sid:"", sname:"TradeNest", title:"Nike Running Shoes Size 7",   cat:"Clothing",         cond:"Good",     brand:"Nike",   ver:"Air Zoom",    price:"3500",  age:"5 months",  city:"Mumbai",    desc:"Worn about 15 times. Clean and in good shape.",                    photo:"https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=500&q=80", on:Date.now()-5*86400000 },
+      { id:"p4",  sid:"", sname:"TradeNest", title:"MacBook Air M1 2020",         cat:"Electronics",      cond:"Good",     brand:"Apple",  ver:"M1 2020",     price:"72000", age:"2 years",   city:"Delhi",     desc:"Battery 88%. Original charger. College use only.",                 photo:"https://images.unsplash.com/photo-1517336714731-489689fd1ca8?w=500&q=80", on:Date.now()-4*86400000 },
+      { id:"p5",  sid:"", sname:"TradeNest", title:"Wooden Study Table",          cat:"Furniture",        cond:"Fair",     brand:"Local",  ver:"-",           price:"2500",  age:"3 years",   city:"Chennai",   desc:"Sturdy table, some scratches. Buyer must pick up.",                photo:"https://images.unsplash.com/photo-1555041469-a586c61ea9bc?w=500&q=80", on:Date.now()-3*86400000 },
+      { id:"p8",  sid:"", sname:"TradeNest", title:"Canon EOS 1500D + Kit Lens",  cat:"Electronics",      cond:"Good",     brand:"Canon",  ver:"EOS 1500D",   price:"20000", age:"2 years",   city:"Delhi",     desc:"Great for beginners. 18-55mm lens, bag, extra battery.",           photo:"https://images.unsplash.com/photo-1502920917128-1aa500764cbd?w=500&q=80", on:Date.now()-8*3600000  },
+      { id:"p9",  sid:"", sname:"TradeNest", title:"Hero Sprint 26T Cycle",       cat:"Sports & Fitness", cond:"Fair",     brand:"Hero",   ver:"Sprint 26T",  price:"3200",  age:"4 years",   city:"Chennai",   desc:"Needs minor service. Good for commute. Chain replaced.",           photo:"https://images.unsplash.com/photo-1485965120184-e220f721d03e?w=500&q=80", on:Date.now()-5*3600000  },
+      { id:"p10", sid:"", sname:"TradeNest", title:"PS4 Controller DualShock 4",  cat:"Electronics",      cond:"Good",     brand:"Sony",   ver:"DualShock 4", price:"2800",  age:"1.5 years", city:"Bangalore", desc:"Works perfectly. Light wear on thumbsticks.",                      photo:"https://images.unsplash.com/photo-1593118247619-e2d6f056869e?w=500&q=80", on:Date.now()-2*3600000  }
+    ]);
+    localStorage.setItem("seeded", "v2");
   }
 
-  function loadData(key) {
-    var data = localStorage.getItem(key);
-    if (data) {
-      return JSON.parse(data);
-    }
-    return [];
-  }
+  // ---- current user ----
+  var me = null;
 
-  function getSession() {
-    var s = localStorage.getItem("tn_session");
-    if (s) return JSON.parse(s);
-    return null;
-  }
-
-
-  // ============================================================
-  // DEFAULT DATA (runs only once on first visit)
-  // ============================================================
-
-  function setupDefaultData() {
-    if (localStorage.getItem("tn_ready") === "v2") return;
-
-    var users = [
-      { id:"u1", first:"Priya",  last:"Sharma", email:"priya@demo.com",  phone:"9876500001", city:"Chennai",   pass:"demo123", joined:"Jan 2024" },
-      { id:"u2", first:"Arjun",  last:"Nair",   email:"arjun@demo.com",  phone:"9876500002", city:"Bangalore", pass:"demo123", joined:"Feb 2024" },
-      { id:"u3", first:"Meera",  last:"Iyer",   email:"meera@demo.com",  phone:"9876500003", city:"Mumbai",    pass:"demo123", joined:"Mar 2024" },
-      { id:"u4", first:"Rohit",  last:"Verma",  email:"rohit@demo.com",  phone:"9876500004", city:"Delhi",     pass:"demo123", joined:"Apr 2024" }
-    ];
-
-    var products = [
-      { id:"p1",  sellerId:"u1", sellerName:"Priya S.", title:"iPhone 13 128GB",             cat:"Electronics",       cond:"Good",     brand:"Apple",    version:"iPhone 13",   price:48000, age:"1 year",    city:"Chennai",   desc:"Single owner. No scratches. Original charger and box included.",       img:"https://images.unsplash.com/photo-1591337676887-a217a6970a8a?w=500&q=80", time:Date.now() - 9*86400000 },
-      { id:"p2",  sellerId:"u2", sellerName:"Arjun N.", title:"Sony WH-1000XM4 Headphones",  cat:"Electronics",       cond:"Like New", brand:"Sony",     version:"XM4",         price:15000, age:"3 months",  city:"Bangalore", desc:"Used very rarely. Original box. Noise cancellation works perfectly.",   img:"https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=500&q=80", time:Date.now() - 7*86400000 },
-      { id:"p3",  sellerId:"u3", sellerName:"Meera I.", title:"Nike Running Shoes Size 7",    cat:"Clothing & Fashion",cond:"Good",     brand:"Nike",     version:"Air Zoom",    price:3500,  age:"5 months",  city:"Mumbai",    desc:"Worn about 15 times. Clean and in good shape.",                         img:"https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=500&q=80", time:Date.now() - 5*86400000 },
-      { id:"p4",  sellerId:"u4", sellerName:"Rohit V.", title:"MacBook Air M1 2020",          cat:"Electronics",       cond:"Good",     brand:"Apple",    version:"M1 2020",     price:72000, age:"2 years",   city:"Delhi",     desc:"Battery 88%. Original charger. Used for college work only.",           img:"https://images.unsplash.com/photo-1517336714731-489689fd1ca8?w=500&q=80", time:Date.now() - 4*86400000 },
-      { id:"p5",  sellerId:"u1", sellerName:"Priya S.", title:"Wooden Study Table",           cat:"Furniture",         cond:"Fair",     brand:"Local",    version:"-",           price:2500,  age:"3 years",   city:"Chennai",   desc:"Sturdy table, some scratches. Buyer must pick up.",                     img:"https://images.unsplash.com/photo-1555041469-a586c61ea9bc?w=500&q=80", time:Date.now() - 3*86400000 },
-      { id:"p8",  sellerId:"u4", sellerName:"Rohit V.", title:"Canon EOS 1500D + Kit Lens",   cat:"Electronics",       cond:"Good",     brand:"Canon",    version:"EOS 1500D",   price:20000, age:"2 years",   city:"Delhi",     desc:"Great for beginners. 18-55mm lens, bag and extra battery included.",    img:"https://images.unsplash.com/photo-1502920917128-1aa500764cbd?w=500&q=80", time:Date.now() - 8*3600000  },
-      { id:"p9",  sellerId:"u1", sellerName:"Priya S.", title:"Hero Sprint 26T Cycle",        cat:"Sports & Fitness",  cond:"Fair",     brand:"Hero",     version:"Sprint 26T",  price:3200,  age:"4 years",   city:"Chennai",   desc:"Needs minor servicing. Good for daily commute. Chain replaced.",        img:"https://images.unsplash.com/photo-1485965120184-e220f721d03e?w=500&q=80", time:Date.now() - 5*3600000  },
-      { id:"p10", sellerId:"u2", sellerName:"Arjun N.", title:"PS4 Controller - DualShock 4", cat:"Electronics",       cond:"Good",     brand:"Sony",     version:"DualShock 4", price:2800,  age:"1.5 years", city:"Bangalore", desc:"Works perfectly. Light wear on thumbsticks. Both motors fine.",         img:"https://images.unsplash.com/photo-1593118247619-e2d6f056869e?w=500&q=80", time:Date.now() - 2*3600000  }
-    ];
-
-    var orders = [
-      { id:"o1", buyerId:"u3", sellerId:"u1", title:"iPhone 13 128GB",        img:"https://images.unsplash.com/photo-1591337676887-a217a6970a8a?w=500&q=80", price:48000, status:"Delivered", date:"2024-11-15" },
-      { id:"o2", buyerId:"u4", sellerId:"u2", title:"Sony WH-1000XM4",        img:"https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=500&q=80", price:15000, status:"Delivered", date:"2024-12-02" },
-      { id:"o3", buyerId:"u1", sellerId:"u3", title:"Nike Running Shoes",     img:"https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=500&q=80",     price:3500,  status:"Shipped",   date:"2025-01-08" },
-      { id:"o4", buyerId:"u2", sellerId:"u4", title:"MacBook Air M1",         img:"https://images.unsplash.com/photo-1517336714731-489689fd1ca8?w=500&q=80",  price:72000, status:"Processing", date:"2025-01-18" }
-    ];
-
-    saveData("tn_users",    users);
-    saveData("tn_products", products);
-    saveData("tn_orders",   orders);
-    localStorage.setItem("tn_ready", "v2");
-  }
-
-
-  // ============================================================
-  // SESSION / LOGIN STATE
-  // ============================================================
-
-  var currentUser = null;
-
-  function loadSession() {
-    var s = getSession();
-    if (!s) return;
-
-    var users = loadData("tn_users");
+  function restoreLogin() {
+    var id = getSession();
+    if (!id) return;
+    var users = load("users");
     for (var i = 0; i < users.length; i++) {
-      if (users[i].id === s.id) {
-        currentUser = users[i];
-        break;
-      }
+      if (users[i].id === id) { me = users[i]; break; }
     }
     updateNav();
   }
 
   function updateNav() {
-    if (currentUser) {
+    if (me) {
       document.getElementById("nav-login").style.display   = "none";
       document.getElementById("nav-signup").style.display  = "none";
       document.getElementById("nav-cart").style.display    = "inline";
-      document.getElementById("nav-profile").style.display = "inline";
+      document.getElementById("nav-account").style.display = "inline";
       document.getElementById("nav-hi").style.display      = "inline";
-      document.getElementById("nav-hi").innerText          = "Hi, " + currentUser.first + "!";
-      updateCartCount();
+      document.getElementById("nav-hi").innerText          = "Hi, " + me.first + "!";
     } else {
       document.getElementById("nav-login").style.display   = "inline";
       document.getElementById("nav-signup").style.display  = "inline";
       document.getElementById("nav-cart").style.display    = "none";
-      document.getElementById("nav-profile").style.display = "none";
+      document.getElementById("nav-account").style.display = "none";
       document.getElementById("nav-hi").style.display      = "none";
     }
   }
 
-
-  // ============================================================
-  // NAVIGATION
-  // ============================================================
-
-  function goTo(page) {
-
-    // these pages need login
-    if (page === "sell" || page === "cart" || page === "profile") {
-      if (!currentUser) {
-        goTo("login");
-        return;
-      }
+  // ---- navigation (same pattern as LearnFree show()) ----
+  function show(pageName) {
+    if ((pageName === "sell" || pageName === "cart" || pageName === "account") && !me) {
+      show("login"); return;
     }
-
-    // hide all pages
-    var allPages = document.getElementsByClassName("page");
-    for (var i = 0; i < allPages.length; i++) {
-      allPages[i].classList.remove("show");
-    }
-
-    // show the right page
-    document.getElementById("page-" + page).classList.add("show");
+    document.querySelectorAll(".page").forEach(function(p) { p.classList.remove("active"); });
+    document.querySelectorAll("nav a").forEach(function(a) { a.classList.remove("active"); });
+    document.getElementById("page-" + pageName).classList.add("active");
+    var n = document.getElementById("nav-" + pageName);
+    if (n) n.classList.add("active");
     window.scrollTo(0, 0);
-
-    // load data for that page
-    if (page === "home")    showProducts();
-    if (page === "profile") showProfile();
-    if (page === "cart")    showCart();
+    if (pageName === "home")    loadGrid();
+    if (pageName === "account") loadAccount();
+    if (pageName === "cart")    loadCart();
   }
 
+  // ---- toast (same pattern as LearnFree) ----
+  var toastTimer;
+  function toast(msg) {
+    clearTimeout(toastTimer);
+    var t = document.getElementById("toast");
+    t.innerText = msg;
+    t.style.display = "block";
+    toastTimer = setTimeout(function() { t.style.display = "none"; }, 3000);
+  }
 
-  // ============================================================
-  // LOGIN
-  // ============================================================
-
+  // ---- login ----
   function doLogin() {
-    var email = document.getElementById("login-email").value.trim();
-    var pass  = document.getElementById("login-pass").value;
-    var errEl = document.getElementById("login-err");
-    errEl.innerText = "";
-
-    if (!email || !pass) {
-      errEl.innerText = "Please fill in all fields.";
-      return;
-    }
-
-    var users = loadData("tn_users");
+    var email = document.getElementById("l-email").value.trim();
+    var pass  = document.getElementById("l-pass").value;
+    var err   = document.getElementById("login-err");
+    err.innerText = "";
+    if (!email || !pass) { err.innerText = "Please fill in all fields."; return; }
+    var users = load("users");
     var found = null;
     for (var i = 0; i < users.length; i++) {
-      if (users[i].email.toLowerCase() === email.toLowerCase() && users[i].pass === pass) {
-        found = users[i];
-        break;
+      if (users[i].email.toLowerCase() === email.toLowerCase() && users[i].password === pass) {
+        found = users[i]; break;
       }
     }
-
-    if (!found) {
-      errEl.innerText = "Wrong email or password. Try again.";
-      return;
-    }
-
-    currentUser = found;
-    localStorage.setItem("tn_session", JSON.stringify({ id: found.id }));
+    if (!found) { err.innerText = "Wrong email or password."; return; }
+    me = found;
+    saveSession(found.id);
     updateNav();
-    showToast("Welcome back, " + found.first + "!");
-    goTo("home");
+    show("home");
   }
 
-
-  // ============================================================
-  // SIGNUP
-  // ============================================================
-
+  // ---- signup ----
   function doSignup() {
     var first   = document.getElementById("s-first").value.trim();
     var last    = document.getElementById("s-last").value.trim();
@@ -837,644 +421,274 @@
     var city    = document.getElementById("s-city").value.trim();
     var pass    = document.getElementById("s-pass").value;
     var confirm = document.getElementById("s-confirm").value;
-    var errEl   = document.getElementById("signup-err");
-    errEl.innerText = "";
-
-    if (!first || !last || !email || !phone || !city || !pass || !confirm) {
-      errEl.innerText = "All fields are required.";
-      return;
-    }
-    if (pass.length < 6) {
-      errEl.innerText = "Password must be at least 6 characters.";
-      return;
-    }
-    if (pass !== confirm) {
-      errEl.innerText = "Passwords do not match.";
-      return;
-    }
-
-    var users = loadData("tn_users");
+    var err     = document.getElementById("signup-err");
+    err.innerText = "";
+    if (!first || !last || !email || !phone || !city || !pass || !confirm) { err.innerText = "All fields are required."; return; }
+    if (pass.length < 6) { err.innerText = "Password must be at least 6 characters."; return; }
+    if (pass !== confirm) { err.innerText = "Passwords do not match."; return; }
+    var users = load("users");
     for (var i = 0; i < users.length; i++) {
-      if (users[i].email.toLowerCase() === email.toLowerCase()) {
-        errEl.innerText = "This email is already registered.";
-        return;
-      }
+      if (users[i].email.toLowerCase() === email.toLowerCase()) { err.innerText = "Email already registered."; return; }
     }
-
-    var newUser = {
-      id:     "u" + Date.now(),
-      first:  first,
-      last:   last,
-      email:  email,
-      phone:  phone,
-      city:   city,
-      pass:   pass,
-      joined: new Date().toLocaleString("default", { month:"short", year:"numeric" })
-    };
-
+    var newUser = { id:"u"+Date.now(), first:first, last:last, email:email, phone:phone, city:city, password:pass };
     users.push(newUser);
-    saveData("tn_users", users);
-
-    currentUser = newUser;
-    localStorage.setItem("tn_session", JSON.stringify({ id: newUser.id }));
+    save("users", users);
+    me = newUser;
+    saveSession(newUser.id);
     updateNav();
-    showToast("Account created! Welcome to TradeNest!");
-    goTo("home");
+    show("home");
   }
 
-
-  // ============================================================
-  // LOGOUT
-  // ============================================================
-
+  // ---- logout ----
   function doLogout() {
-    currentUser = null;
-    localStorage.removeItem("tn_session");
-    updateNav();
-    showToast("Logged out.");
-    goTo("home");
+    me = null; clearSession(); updateNav(); show("home");
   }
 
-
-  // ============================================================
-  // SHOW PRODUCTS (home page)
-  // ============================================================
-
-  function showProducts() {
-    var searchText = document.getElementById("search-box").value.toLowerCase();
-    var products   = loadData("tn_products");
-
-    // filter by search
-    var filtered = [];
+  // ---- product grid ----
+  function loadGrid() {
+    var q = document.getElementById("search").value.toLowerCase();
+    var products = load("products");
+    var list = [];
     for (var i = 0; i < products.length; i++) {
       var p = products[i];
-      var matchTitle = p.title.toLowerCase().indexOf(searchText) !== -1;
-      var matchBrand = p.brand && p.brand.toLowerCase().indexOf(searchText) !== -1;
-      if (matchTitle || matchBrand) {
-        filtered.push(p);
+      if (p.title.toLowerCase().indexOf(q) !== -1 || (p.price && p.price.toString().indexOf(q) !== -1)) {
+        list.push(p);
       }
     }
-
-    // sort newest first
-    filtered.sort(function(a, b) { return b.time - a.time; });
-
-    var grid = document.getElementById("product-grid");
-
-    if (filtered.length === 0) {
-      grid.innerHTML = "<p style='color:#777;'>No products found.</p>";
-      return;
-    }
-
+    list.sort(function(a, b) { return b.on - a.on; });
+    var grid = document.getElementById("grid");
+    if (list.length === 0) { grid.innerHTML = "<p style='color:#777'>No products found.</p>"; return; }
     var html = "";
-    for (var i = 0; i < filtered.length; i++) {
-      var p = filtered[i];
-      html += '<div class="card" onclick="openProduct(\'' + p.id + '\')">';
-      html += '<img src="' + p.img + '" alt="product" onerror="this.style.display=\'none\'">';
-      html += '<div class="card-info">';
+    for (var i = 0; i < list.length; i++) {
+      var p = list[i];
+      html += '<div class="card">';
+      html += '<img src="' + p.photo + '" alt="" onerror="this.style.display=\'none\'">';
+      html += '<div class="body">';
       html += '<p><strong>' + p.title + '</strong></p>';
-      html += '<p class="card-price">Rs.' + Number(p.price).toLocaleString("en-IN") + '</p>';
-      html += '<p>' + p.cat + ' - ' + p.cond + '</p>';
-      html += '<p class="card-seller">' + p.sellerName + ' | ' + p.city + '</p>';
+      html += '<p class="price">Rs.' + p.price + '</p>';
+      html += '<p>' + p.cond + '</p>';
+      html += '<p class="seller">' + p.sname + '</p>';
       html += '</div>';
+
+      // show buttons only if logged in and not the seller's own product
+      if (me && me.id !== p.sid) {
+        html += '<div class="card-btns">';
+        html += '<button class="btn-outline" onclick="addToCart(\'' + p.id + '\')">Add to Cart</button>';
+        html += '<button onclick="doOrder(\'' + p.id + '\')">Order Now</button>';
+        html += '</div>';
+      } else if (!me) {
+        html += '<div class="card-btns">';
+        html += '<button onclick="show(\'login\')">Login to Order</button>';
+        html += '</div>';
+      }
+
       html += '</div>';
     }
     grid.innerHTML = html;
   }
 
-
-  // ============================================================
-  // OPEN PRODUCT POPUP
-  // ============================================================
-
-  var selectedProduct = null;
-
-  function openProduct(id) {
-    var products = loadData("tn_products");
+  // ---- order now ----
+  function doOrder(id) {
+    if (!me) { show("login"); return; }
+    var products = load("products");
     var p = null;
-    for (var i = 0; i < products.length; i++) {
-      if (products[i].id === id) {
-        p = products[i];
-        break;
-      }
-    }
+    for (var i = 0; i < products.length; i++) { if (products[i].id === id) { p = products[i]; break; } }
     if (!p) return;
-    selectedProduct = p;
-
-    // build popup HTML
-    var html = "";
-    html += '<img src="' + p.img + '" alt="product" onerror="this.style.display=\'none\'">';
-    html += '<h3>' + p.title + '</h3>';
-    html += '<div class="popup-price">Rs.' + Number(p.price).toLocaleString("en-IN") + '</div>';
-    html += '<p style="margin-top:8px">' + p.desc + '</p>';
-    html += '<p><b>Category:</b> '  + p.cat   + '</p>';
-    html += '<p><b>Condition:</b> ' + p.cond  + '</p>';
-    if (p.brand)   html += '<p><b>Brand:</b> '   + p.brand   + '</p>';
-    if (p.version) html += '<p><b>Model:</b> '   + p.version + '</p>';
-    if (p.age)     html += '<p><b>Used for:</b> ' + p.age    + '</p>';
-    if (p.city)    html += '<p><b>Location:</b> ' + p.city   + '</p>';
-    html += '<p><b>Seller:</b> <span style="color:red">' + p.sellerName + '</span></p>';
-
-    document.getElementById("popup-body").innerHTML = html;
-
-    var orderBtn = document.getElementById("order-btn");
-    var cartBtn  = document.getElementById("cart-btn");
-
-    if (currentUser && currentUser.id === p.sellerId) {
-      // user is viewing their own product
-      orderBtn.style.display = "none";
-      cartBtn.style.display  = "none";
-    } else if (!currentUser) {
-      // not logged in
-      orderBtn.innerText     = "Login to Order";
-      orderBtn.style.display = "inline";
-      cartBtn.style.display  = "none";
-    } else {
-      // logged in, viewing someone else's product
-      orderBtn.innerText     = "Order Now";
-      orderBtn.style.display = "inline";
-      cartBtn.style.display  = "inline";
-    }
-
-    document.getElementById("product-popup").classList.add("show");
+    var orders = load("orders");
+    orders.push({ id:"o"+Date.now(), bid:me.id, sid:p.sid, title:p.title, photo:p.photo, price:p.price, status:"Processing", date:new Date().toISOString().split("T")[0] });
+    save("orders", orders);
+    toast("Order placed!");
   }
 
-  function closePopup(id) {
-    document.getElementById(id).classList.remove("show");
-  }
+  // ---- cart ----
+  function cartKey() { return "cart_" + me.id; }
 
-  // close popup when clicking the dark background
-  document.getElementById("product-popup").onclick = function(e) {
-    if (e.target === this) closePopup("product-popup");
-  };
-  document.getElementById("delete-popup").onclick = function(e) {
-    if (e.target === this) closePopup("delete-popup");
-  };
-
-
-  // ============================================================
-  // ORDER NOW
-  // ============================================================
-
-  function doOrder() {
-    if (!currentUser) {
-      closePopup("product-popup");
-      goTo("login");
-      return;
-    }
-
-    if (countTodayOrders() >= 3) {
-      showToast("You can only order 3 items per day! Try again tomorrow.");
-      closePopup("product-popup");
-      return;
-    }
-
-    var newOrder = {
-      id:       "o" + Date.now(),
-      buyerId:  currentUser.id,
-      sellerId: selectedProduct.sellerId,
-      title:    selectedProduct.title,
-      img:      selectedProduct.img,
-      price:    selectedProduct.price,
-      status:   "Processing",
-      date:     new Date().toISOString().split("T")[0]
-    };
-
-    var orders = loadData("tn_orders");
-    orders.push(newOrder);
-    saveData("tn_orders", orders);
-
-    closePopup("product-popup");
-    showToast("Order placed!");
-  }
-
-  function countTodayOrders() {
-    if (!currentUser) return 0;
-    var today  = new Date().toDateString();
-    var orders = loadData("tn_orders");
-    var count  = 0;
-    for (var i = 0; i < orders.length; i++) {
-      if (orders[i].buyerId === currentUser.id && new Date(orders[i].date).toDateString() === today) {
-        count++;
-      }
-    }
-    return count;
-  }
-
-
-  // ============================================================
-  // CART
-  // ============================================================
-
-  function updateCartCount() {
-    if (!currentUser) return;
-    var cart = loadData("tn_cart_" + currentUser.id);
-    document.getElementById("cart-count").innerText = cart.length;
-  }
-
-  function addToCart() {
-    if (!currentUser) {
-      closePopup("product-popup");
-      goTo("login");
-      return;
-    }
-
-    var cart = loadData("tn_cart_" + currentUser.id);
-
-    // check if already in cart
+  function addToCart(id) {
+    if (!me) { show("login"); return; }
+    var products = load("products");
+    var p = null;
+    for (var i = 0; i < products.length; i++) { if (products[i].id === id) { p = products[i]; break; } }
+    if (!p) return;
+    var cart = load(cartKey());
     for (var i = 0; i < cart.length; i++) {
-      if (cart[i].productId === selectedProduct.id) {
-        showToast("Already in cart!");
-        return;
-      }
+      if (cart[i].pid === id) { toast("Already in cart!"); return; }
     }
-
-    cart.push({
-      productId: selectedProduct.id,
-      sellerId:  selectedProduct.sellerId,
-      title:     selectedProduct.title,
-      img:       selectedProduct.img,
-      price:     selectedProduct.price
-    });
-
-    saveData("tn_cart_" + currentUser.id, cart);
-    updateCartCount();
-    closePopup("product-popup");
-    showToast("Added to cart!");
+    cart.push({ pid:p.id, sid:p.sid, title:p.title, photo:p.photo, price:p.price });
+    save(cartKey(), cart);
+    toast("Added to cart!");
   }
 
-  function showCart() {
-    if (!currentUser) return;
-
-    var cart       = loadData("tn_cart_" + currentUser.id);
-    var listEl     = document.getElementById("cart-list");
-    var totalEl    = document.getElementById("cart-total");
-    var checkoutEl = document.getElementById("cart-checkout");
-
+  function loadCart() {
+    if (!me) return;
+    var cart   = load(cartKey());
+    var listEl = document.getElementById("cart-list");
+    var totEl  = document.getElementById("cart-total");
+    var btnEl  = document.getElementById("cart-order-btn");
     if (cart.length === 0) {
-      listEl.innerHTML     = "<p style='color:#777; font-size:13px;'>Your cart is empty.</p>";
-      totalEl.innerText    = "";
-      checkoutEl.innerHTML = "";
-      return;
+      listEl.innerHTML = "<p style='color:#777;font-size:13px'>Your cart is empty.</p>";
+      totEl.innerText = ""; btnEl.innerHTML = ""; return;
     }
-
-    var html  = "";
-    var total = 0;
-
+    var html = ""; var total = 0;
     for (var i = 0; i < cart.length; i++) {
       var c = cart[i];
-      total += c.price;
-      html += '<div class="item-row">';
-      html += '<img src="' + c.img + '" alt="" onerror="this.style.display=\'none\'">';
-      html += '<div class="item-info">';
-      html += '<strong>' + c.title + '</strong><br>';
-      html += 'Rs.' + Number(c.price).toLocaleString("en-IN");
-      html += '</div>';
-      html += '<button onclick="removeFromCart(\'' + c.productId + '\')" style="background:white; color:red; border:1px solid red; padding:4px 10px; font-size:12px; margin-top:0;">Remove</button>';
+      total += Number(c.price);
+      html += '<div class="row">';
+      html += '<img src="' + c.photo + '" alt="" onerror="this.style.display=\'none\'">';
+      html += '<div class="info"><strong>' + c.title + '</strong><br>Rs.' + c.price + '</div>';
+      html += '<button onclick="removeFromCart(\'' + c.pid + '\')" style="background:white;color:red;border:1px solid red">Remove</button>';
       html += '</div>';
     }
-
-    listEl.innerHTML  = html;
-    totalEl.innerText = "Total: Rs." + Number(total).toLocaleString("en-IN");
-    checkoutEl.innerHTML = '<button onclick="checkoutAll()">Order All Items</button>';
+    listEl.innerHTML = html;
+    totEl.innerText  = "Total: Rs." + total;
+    btnEl.innerHTML  = '<button onclick="orderCart()">Order All Items</button>';
   }
 
-  function removeFromCart(productId) {
-    var cart    = loadData("tn_cart_" + currentUser.id);
-    var newCart = [];
+  function removeFromCart(pid) {
+    var cart = load(cartKey());
     for (var i = 0; i < cart.length; i++) {
-      if (cart[i].productId !== productId) {
-        newCart.push(cart[i]);
-      }
+      if (cart[i].pid === pid) { cart.splice(i, 1); break; }
     }
-    saveData("tn_cart_" + currentUser.id, newCart);
-    updateCartCount();
-    showCart();
-    showToast("Removed from cart.");
+    save(cartKey(), cart); loadCart(); toast("Removed from cart.");
   }
 
-  function checkoutAll() {
-    if (!currentUser) return;
-
-    var cart = loadData("tn_cart_" + currentUser.id);
+  function orderCart() {
+    if (!me) return;
+    var cart = load(cartKey());
     if (cart.length === 0) return;
-
-    if (countTodayOrders() + cart.length > 3) {
-      showToast("Daily limit is 3 orders! Remove some items.");
-      return;
-    }
-
-    var orders = loadData("tn_orders");
+    var orders = load("orders");
     for (var i = 0; i < cart.length; i++) {
       var c = cart[i];
-      orders.push({
-        id:       "o" + Date.now() + i,
-        buyerId:  currentUser.id,
-        sellerId: c.sellerId,
-        title:    c.title,
-        img:      c.img,
-        price:    c.price,
-        status:   "Processing",
-        date:     new Date().toISOString().split("T")[0]
-      });
+      orders.push({ id:"o"+Date.now()+i, bid:me.id, sid:c.sid, title:c.title, photo:c.photo, price:c.price, status:"Processing", date:new Date().toISOString().split("T")[0] });
     }
-
-    saveData("tn_orders", orders);
-    saveData("tn_cart_" + currentUser.id, []);
-    updateCartCount();
-    showToast("All items ordered!");
-    goTo("profile");
+    save("orders", orders); save(cartKey(), []);
+    toast("All items ordered!"); show("account");
   }
 
+  // ---- sell ----
+  var photoData = "";
 
-  // ============================================================
-  // SELL A PRODUCT
-  // ============================================================
-
-  var uploadedImage = "";
-
-  function previewImg(event) {
-    var file = event.target.files[0];
-    if (!file) return;
+  function previewPhoto(e) {
+    var file = e.target.files[0]; if (!file) return;
     var reader = new FileReader();
-    reader.onload = function(e) {
-      uploadedImage = e.target.result;
-      document.getElementById("img-preview").src          = uploadedImage;
-      document.getElementById("img-preview").style.display = "block";
+    reader.onload = function(x) {
+      photoData = x.target.result;
+      document.getElementById("photo-preview").src = photoData;
+      document.getElementById("photo-preview").style.display = "block";
     };
     reader.readAsDataURL(file);
   }
 
   function doSell() {
-    if (!currentUser) return;
-
-    var title   = document.getElementById("p-title").value.trim();
-    var cat     = document.getElementById("p-cat").value;
-    var cond    = document.getElementById("p-cond").value;
-    var brand   = document.getElementById("p-brand").value.trim();
-    var version = document.getElementById("p-version").value.trim();
-    var price   = document.getElementById("p-price").value;
-    var age     = document.getElementById("p-age").value.trim();
-    var desc    = document.getElementById("p-desc").value.trim();
-    var loc     = document.getElementById("p-loc").value.trim();
-    var errEl   = document.getElementById("sell-err");
-    var okEl    = document.getElementById("sell-ok");
-    errEl.innerText = "";
-    okEl.innerText  = "";
-
-    if (!title || !cat || !price || !desc) {
-      errEl.innerText = "Title, Category, Price and Description are required.";
-      return;
-    }
-
+    if (!me) return;
+    var title = document.getElementById("p-title").value.trim();
+    var price = document.getElementById("p-price").value.trim();
+    var desc  = document.getElementById("p-desc").value.trim();
+    var err   = document.getElementById("sell-err");
+    var ok    = document.getElementById("sell-ok");
+    err.innerText = ""; ok.innerText = "";
+    if (!title || !price || !desc) { err.innerText = "Title, Price and Description are required."; return; }
     var newProduct = {
-      id:         "p" + Date.now(),
-      sellerId:   currentUser.id,
-      sellerName: currentUser.first + " " + currentUser.last[0] + ".",
-      title:      title,
-      cat:        cat,
-      cond:       cond,
-      brand:      brand,
-      version:    version,
-      price:      Number(price),
-      age:        age,
-      city:       loc,
-      desc:       desc,
-      img:        uploadedImage,
-      time:       Date.now()
+      id:"p"+Date.now(), sid:me.id, sname:me.first+" "+me.last[0]+".",
+      title:title, cond:document.getElementById("p-cond").value,
+      price:price, desc:desc, photo:photoData, on:Date.now()
     };
-
-    var products = loadData("tn_products");
-    products.push(newProduct);
-    saveData("tn_products", products);
-
-    okEl.innerText = "Listing posted! Redirecting to profile...";
-
-    // clear the form
-    uploadedImage = "";
-    document.getElementById("img-preview").style.display = "none";
-    document.getElementById("p-title").value   = "";
-    document.getElementById("p-cat").value     = "";
-    document.getElementById("p-brand").value   = "";
-    document.getElementById("p-version").value = "";
-    document.getElementById("p-price").value   = "";
-    document.getElementById("p-age").value     = "";
-    document.getElementById("p-desc").value    = "";
-    document.getElementById("p-loc").value     = "";
-
-    setTimeout(function() {
-      okEl.innerText = "";
-      goTo("profile");
-    }, 1500);
+    var products = load("products"); products.push(newProduct); save("products", products);
+    ok.innerText = "Listed! Redirecting...";
+    photoData = "";
+    document.getElementById("photo-preview").style.display = "none";
+    ["p-title","p-price","p-desc"].forEach(function(id) { document.getElementById(id).value = ""; });
+    setTimeout(function() { ok.innerText = ""; show("account"); }, 1200);
   }
 
-
-  // ============================================================
-  // ORDERS INSIDE PROFILE PAGE
-  // ============================================================
-
-  var currentTab2 = "bought";
-
-  function showAccountOrders() {
-    var section = document.getElementById("account-orders-section");
-    if (section.style.display === "none") {
-      section.style.display = "block";
-      loadOrdersInProfile("bought");
-    } else {
-      section.style.display = "none";
-    }
-  }
-
-  function switchTab2(tab, btn) {
-    currentTab2 = tab;
-    var tabs = document.getElementsByClassName("tab");
-    for (var i = 0; i < tabs.length; i++) {
-      tabs[i].classList.remove("active");
-    }
-    btn.classList.add("active");
-    loadOrdersInProfile(tab);
-  }
-
-  function loadOrdersInProfile(tab) {
-    if (!currentUser) return;
-
-    document.getElementById("today-count2").innerText = countTodayOrders();
-
-    var orders   = loadData("tn_orders");
-    var myOrders = [];
-
-    for (var i = 0; i < orders.length; i++) {
-      if (tab === "bought" && orders[i].buyerId  === currentUser.id) myOrders.push(orders[i]);
-      if (tab === "sold"   && orders[i].sellerId === currentUser.id) myOrders.push(orders[i]);
-    }
-
-    myOrders.reverse();
-
-    var el = document.getElementById("order-list2");
-
-    if (myOrders.length === 0) {
-      el.innerHTML = "<p style='color:#777; font-size:13px;'>No orders here yet.</p>";
-      return;
-    }
-
-    var html = "";
-    for (var i = 0; i < myOrders.length; i++) {
-      var o = myOrders[i];
-      var badgeClass = "processing";
-      if (o.status === "Delivered") badgeClass = "delivered";
-      if (o.status === "Shipped")   badgeClass = "shipped";
-
-      html += '<div class="item-row">';
-      html += '<img src="' + o.img + '" alt="" onerror="this.style.display=\'none\'">';
-      html += '<div class="item-info">';
-      html += '<strong>' + o.title + '</strong><br>';
-      html += 'Rs.' + Number(o.price).toLocaleString("en-IN") + ' - ' + o.date;
-      html += '</div>';
-      html += '<span class="badge ' + badgeClass + '">' + o.status + '</span>';
-      html += '</div>';
-    }
-    el.innerHTML = html;
-  }
-
-
-  // ============================================================
-  // PROFILE PAGE
-  // ============================================================
-
-  function showProfile() {
-    if (!currentUser) return;
-
-    // hide orders section each time profile loads
-    document.getElementById("account-orders-section").style.display = "none";
-
-    document.getElementById("prof-name").innerText   = currentUser.first + " " + currentUser.last;
-    document.getElementById("prof-email").innerText  = currentUser.email;
-    document.getElementById("prof-phone").innerText  = currentUser.phone  || "-";
-    document.getElementById("prof-city").innerText   = currentUser.city   || "-";
-    document.getElementById("prof-joined").innerText = currentUser.joined || "-";
-
-    var products = loadData("tn_products");
-    var mine = [];
-    for (var i = 0; i < products.length; i++) {
-      if (products[i].sellerId === currentUser.id) {
-        mine.push(products[i]);
-      }
-    }
+  // ---- account page ----
+  function loadAccount() {
+    if (!me) return;
+    document.getElementById("orders-section").style.display = "none";
+    document.getElementById("a-name").innerText  = me.first + " " + me.last;
+    document.getElementById("a-email").innerText = me.email;
+    document.getElementById("a-phone").innerText = me.phone || "-";
+    document.getElementById("a-city").innerText  = me.city  || "-";
+    var products = load("products"); var mine = [];
+    for (var i = 0; i < products.length; i++) { if (products[i].sid === me.id) mine.push(products[i]); }
     mine.reverse();
-
-    document.getElementById("prof-count").innerText = mine.length;
-
+    document.getElementById("a-count").innerText = mine.length;
     var el = document.getElementById("my-listings");
-
-    if (mine.length === 0) {
-      el.innerHTML = "<p style='font-size:13px; color:#777;'>No listings yet.</p>";
-      return;
-    }
-
+    if (mine.length === 0) { el.innerHTML = "<p style='color:#777;font-size:13px'>No listings yet.</p>"; return; }
     var html = "";
     for (var i = 0; i < mine.length; i++) {
       var p = mine[i];
-      html += '<div class="item-row">';
-      html += '<img src="' + p.img + '" alt="" onerror="this.style.display=\'none\'">';
-      html += '<div class="item-info">';
-      html += '<strong>' + p.title + '</strong><br>';
-      html += 'Rs.' + Number(p.price).toLocaleString("en-IN") + ' - ' + p.cat;
-      html += '</div>';
-      html += '<button onclick="removeListing(\'' + p.id + '\')" style="background:white; color:red; border:1px solid red; padding:4px 10px; font-size:12px; margin-top:0;">Remove</button>';
-      html += '</div>';
+      html += '<div class="row"><div class="info"><strong>' + p.title + '</strong></div>';
+      html += '<button onclick="removeListing(\'' + p.id + '\')" style="background:white;color:red;border:1px solid red">Remove</button></div>';
     }
     el.innerHTML = html;
   }
 
   function removeListing(id) {
     if (!confirm("Remove this listing?")) return;
-    var products = loadData("tn_products");
-    var updated  = [];
+    var products = load("products");
     for (var i = 0; i < products.length; i++) {
-      if (products[i].id !== id) {
-        updated.push(products[i]);
-      }
+      if (products[i].id === id) { products.splice(i, 1); break; }
     }
-    saveData("tn_products", updated);
-    showToast("Listing removed.");
-    showProfile();
+    save("products", products); loadAccount();
   }
 
-
-  // ============================================================
-  // DELETE ACCOUNT
-  // ============================================================
-
-  function openDeletePopup() {
-    document.getElementById("delete-confirm").value = "";
-    document.getElementById("delete-popup").classList.add("show");
+  // ---- orders ----
+  function toggleOrders() {
+    var section = document.getElementById("orders-section");
+    if (section.style.display === "none") { section.style.display = "block"; loadOrders(); }
+    else { section.style.display = "none"; }
   }
 
-  function doDeleteAccount() {
-    var typed = document.getElementById("delete-confirm").value;
-    if (typed !== "DELETE") {
-      showToast("Please type DELETE to confirm.");
-      return;
-    }
-
-    // remove user
-    var users    = loadData("tn_users");
-    var newUsers = [];
-    for (var i = 0; i < users.length; i++) {
-      if (users[i].id !== currentUser.id) newUsers.push(users[i]);
-    }
-    saveData("tn_users", newUsers);
-
-    // remove their products
-    var products    = loadData("tn_products");
-    var newProducts = [];
-    for (var i = 0; i < products.length; i++) {
-      if (products[i].sellerId !== currentUser.id) newProducts.push(products[i]);
-    }
-    saveData("tn_products", newProducts);
-
-    // remove their orders
-    var orders    = loadData("tn_orders");
-    var newOrders = [];
+  function loadOrders() {
+    if (!me) return;
+    var orders = load("orders"); var mine = [];
     for (var i = 0; i < orders.length; i++) {
-      if (orders[i].buyerId !== currentUser.id && orders[i].sellerId !== currentUser.id) {
-        newOrders.push(orders[i]);
-      }
+      if (orders[i].bid === me.id || orders[i].sid === me.id) mine.push(orders[i]);
     }
-    saveData("tn_orders", newOrders);
-
-    // clear their cart
-    localStorage.removeItem("tn_cart_" + currentUser.id);
-
-    currentUser = null;
-    localStorage.removeItem("tn_session");
-    closePopup("delete-popup");
-    updateNav();
-    showToast("Account deleted.");
-    goTo("home");
+    mine.reverse();
+    var el = document.getElementById("orders-list");
+    if (mine.length === 0) { el.innerHTML = "<p style='color:#777;font-size:13px'>No orders yet.</p>"; return; }
+    var html = "";
+    for (var i = 0; i < mine.length; i++) {
+      var o = mine[i];
+      var cls = o.status === "Delivered" ? "delivered" : o.status === "Shipped" ? "shipped" : "processing";
+      html += '<div class="row">';
+      html += '<img src="' + o.photo + '" alt="" onerror="this.style.display=\'none\'">';
+      html += '<div class="info"><strong>' + o.title + '</strong><br>Rs.' + o.price + ' — ' + o.date + '</div>';
+      html += '<span class="status ' + cls + '">' + o.status + '</span>';
+      html += '</div>';
+    }
+    el.innerHTML = html;
   }
 
+  // ---- delete account ----
+  function doDeleteAccount() {
+    var users = load("users");
+    for (var i = 0; i < users.length; i++) {
+      if (users[i].id === me.id) { users.splice(i, 1); break; }
+    }
+    save("users", users);
 
-  // ============================================================
-  // TOAST NOTIFICATION
-  // ============================================================
+    var products = load("products");
+    for (var i = products.length - 1; i >= 0; i--) {
+      if (products[i].sid === me.id) products.splice(i, 1);
+    }
+    save("products", products);
 
-  function showToast(msg) {
-    var t = document.getElementById("toast");
-    t.innerText      = msg;
-    t.style.display  = "block";
-    setTimeout(function() {
-      t.style.display = "none";
-    }, 3000);
+    var orders = load("orders");
+    for (var i = orders.length - 1; i >= 0; i--) {
+      if (orders[i].bid === me.id || orders[i].sid === me.id) orders.splice(i, 1);
+    }
+    save("orders", orders);
+
+    localStorage.removeItem(cartKey());
+    me = null; clearSession(); updateNav(); show("home");
   }
 
-
-  // ============================================================
-  // START THE APP
-  // ============================================================
-
-  setupDefaultData();
-  loadSession();
-  showProducts();
+  // ---- start ----
+  seedData();
+  restoreLogin();
+  loadGrid();
 
 </script>
 </body>
